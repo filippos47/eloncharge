@@ -10,9 +10,7 @@ class SystemView(View):
 
     def post(self, request):
         updfile = request.FILES['file'].read().decode('utf-8')
-        print(updfile)
         updfile_rows = updfile.split("\n")
-        print(updfile_rows)
 
         # This part is not actually needed; we don't have to return the uploaded
         # file. Also, some more formatting work can be done here.
