@@ -1,7 +1,7 @@
-import csv
-
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
+
+from api.utils import produce_csv_response
 
 class PointView(View):
 
@@ -9,11 +9,9 @@ class PointView(View):
         requested_format = self.request.GET.get('format', 'json')
 
         if requested_format == 'csv':
-            csv_response = HttpResponse(content_type='text/csv')
-            csv_response['Content-Disposition'] = 'attachment; filename="out.csv"'
-            writer = csv.writer(csv_response)
-            writer.writerow([point_id, date_from, date_to])
-            return csv_response
+            data = [['PointID', 'PeriodFrom', 'PeriodTo'],
+                    [point_id, date_from, date_to]]
+            return produce_csv_response(data)
         else:
             return JsonResponse({'PointID': point_id,
                                  'PeriodFrom': date_from,

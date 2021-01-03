@@ -1,7 +1,7 @@
-import csv
-
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
+
+from api.utils import produce_csv_response
 
 class EVView(View):
 
@@ -12,11 +12,9 @@ class EVView(View):
         # If the requested format is not json|csv, we could either return json
         # or some kind of error. Here the first approach is selected.
         if requested_format == 'csv':
-            csv_response = HttpResponse(content_type='text/csv')
-            csv_response['Content-Disposition'] = 'attachment; filename="out.csv"'
-            writer = csv.writer(csv_response)
-            writer.writerow([vehicle_id, date_from, date_to])
-            return csv_response
+            data = [['VehicleID', 'PeriodFrom', 'PeriodTo'],
+                    [vehicle_id, date_from, date_to]]
+            return produce_csv_response(data)
         else:
             return JsonResponse({'VehicleID': vehicle_id,
                                  'PeriodFrom': date_from,
