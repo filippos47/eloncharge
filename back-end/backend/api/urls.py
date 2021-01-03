@@ -9,7 +9,6 @@ from .views import (
     EVView
 )
 
-
 urlpatterns = [
     path('login/', SessionView.as_view(), name='session_login'),
     path('logout/', SessionView.as_view(), name='session_logout'),
@@ -24,12 +23,12 @@ urlpatterns = [
     path('admin/resetsessions/', SystemView.as_view(),
         name='system_resetsessions'),
 
-    path('sessionsPerPoint/<str:point_id>/<str:date_from>/<str:date_to>/',
+    path('sessionsPerPoint/<str:point_id>/<str:date_from>/<str:date_to>',
         PointView.as_view(), name='point_sessions'),
 
-    path('sessionsPerStation/<str:station_id>/<str:date_from>/<str:date_to>/',
+    path('sessionsPerStation/<str:station_id>/<str:date_from>/<str:date_to>',
         StationView.as_view(), name='station_sessions'),
 
-    path('sessionsPerEV/<str:vehicle_id>/<str:date_from>/<str:date_to>/',
+    path('sessionsPerEV/<str:vehicle_id>/<str:date_from>/<str:date_to>',
         EVView.as_view(), name='ev_sessions'),
 ]
