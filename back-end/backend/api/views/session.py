@@ -12,4 +12,4 @@ class SessionView(View):
         return JsonResponse({'username': username, 'password': password})
 
     def delete(self, request):
-        return JsonResponse({}, status=200)
+        return JsonResponse({})
