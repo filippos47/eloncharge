@@ -1,7 +1,7 @@
 from django.views import View
 from django.http import JsonResponse
 
-from api.utils import produce_csv_response
+from api.utils.common import produce_csv_response
 
 class SystemView(View):
 

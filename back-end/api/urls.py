@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from .views import (
-    SessionView,
+    LoginView,
+    LogoutView,
     UserView,
     SystemView,
     PointView,
@@ -11,8 +12,8 @@ from .views import (
 
 
 urlpatterns = [
-            path('login/', SessionView.as_view(), name='session_login'),
-            path('logout/', SessionView.as_view(), name='session_logout'),
+            path('login/', LoginView.as_view(), name='session_login'),
+            path('logout/', LogoutView.as_view(), name='session_logout'),
 
             path('admin/usermod/<str:username>/<str:password>/', UserView.as_view(),
                 name='user_create'),
