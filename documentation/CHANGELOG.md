@@ -4,9 +4,10 @@
 
 - Added `Point` table.
 - Added `UserSession` table.
-- Rename `PricingScheme` table to `Pricing`.
-- Rename `Charge` table to `ChargeSession`.
+- Renamed `PricingScheme` table to `Pricing`.
+- Renamed `Charge` table to `ChargeSession`.
 - Removed `Card` table.
+- Removed `UserCar` table.
 
 ## Detailed overview
 
@@ -47,3 +48,5 @@
 ### Car
 
 - Added field `type`.
+- Added field `user_id`.
+    - One to many relationship between User and Car tables.
