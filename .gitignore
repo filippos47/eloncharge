@@ -1,2 +1,3 @@
 *.swp
 back-end/backend/backend/settings.py
+*.pyc
