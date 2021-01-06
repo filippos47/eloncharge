@@ -1,6 +1,8 @@
 # Backend
 
-## Installation (WIP)
+## Installation
+
+The below commands have been tested on Ubuntu LTS 18.04.
 
 1. Install requirements
 
@@ -35,29 +37,39 @@
         psql=# grant all privileges on database eloncharge to eloncharge;
         ```
 
-3. Create & activate virtual environment
+3. Store password in configuration file
+    - Move template configuration
+
+        ```bash
+        $ cp backend/settings{_test,}.py
+        ```
+
+    - Edit `backend/settings.py` to include the password you specified
+      for postgres in the `DATABASES` variable.
+    
+4. Create & activate virtual environment
 
     ```bash
     $ python3 -m venv .venv
     $ source .venv/bin/activate
     ```
 
-4. Install Django and PostgreSQL dependency
+5. Install requirements
 
     ```bash
-    $ python3 -m pip install Django psycopg2-binary
+    $ pip3 install -r requirements.txt
     ```
 
-5. Run migrations
+6. Run migrations
 
     ```bash
     $ python3 manage.py migrate
     ```
 
-## Usage (WIP)
+## Usage
 
-- Start Django backend, listening at http://localhost:8000
+- Start Django backend, listening at http://localhost:8765
 
     ```bash
-    $ python3 manage.py runserver 8000
+    $ python3 manage.py runserver 8765
     ```
