@@ -18,7 +18,8 @@ def produce_csv_response(data):
     return csv_response
 
 def create_auth_token():
-    return base64.b64encode(os.urandom(64))
+    token= base64.b64encode(os.urandom(64))
+    return token.decode('utf-8')
 
 def token_expires_delta(past=True, hours=None):
     if not hours:
