@@ -1,3 +1,4 @@
 *.swp
 back-end/backend/backend/settings.py
 *.pyc
+back-end/.venv
