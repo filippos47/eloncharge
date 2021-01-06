@@ -6,7 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
 from api.models import UserSession
-from api.utils.common import token_expires_delta, create_auth_token, to_bytes
+from api.utils.common import token_expires_delta, create_auth_token,\
+        to_bytes, get_now
 
 def authenticated(f):
     def check(self, request, *args, **kwargs):
@@ -15,11 +16,9 @@ def authenticated(f):
         if not token:
             return HttpResponseBadRequest("No token in request!")
 
-        date_from = token_expires_delta(past=True)
         try:
-            UserSession.objects.get(token=to_bytes(token), expires__gte=date_from)
+            UserSession.objects.get(token=to_bytes(token), expires__gte=get_now())
         except ObjectDoesNotExist:
-            print ("here")
             return HttpResponseBadRequest("Expired session. Renew token!")
         return f(self, request, *args, **kwargs)
     return check
@@ -35,14 +34,14 @@ class LoginView(View):
         user = authenticate(username=username, password=password)
 
         if not user:
-            return HttpResponseBadRequest("Non existing user!")
+            return HttpResponseBadRequest("Credentials invalid" +\
+                    "or user does not exist.")
 
-        date_from = token_expires_delta(past=True)
         # get existing token or remove old one
         try:
-            session = UserSession.objects.get(user_id=user.id, expires__gte=date_from)
+            session = UserSession.objects.get(user_id=user.id, expires__gte=get_now())
         except ObjectDoesNotExist:
-            date_to = token_expires_delta(past=False)
+            date_to = get_now() + token_expires_delta()
             token = create_auth_token()
             session = UserSession.objects.create(user_id=user, token=token, expires=date_to)
             session.save()
@@ -54,6 +53,6 @@ class LogoutView(View):
     def post(self, request):
         token = to_bytes(request.headers.get('x-auth-observatory', None))
         session = UserSession.objects.get(token=token)
-        session.expires = timezone.now()
+        session.expires = get_now()
         session.save()
         return HttpResponse()

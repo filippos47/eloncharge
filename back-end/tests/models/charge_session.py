@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 from api.models import Car, Point, Pricing, Station, ChargeSession
-from api.utils.common import token_expires_delta
+from api.utils.common import token_expires_delta, get_now
 from django.utils.timezone import now
+from api.utils.common import get_now
 
 class ChargeSessionTest(TestCase):
     def setUp(self):
@@ -33,7 +34,7 @@ class ChargeSessionTest(TestCase):
                 pricing_id=self.pricing,
                 energy_delivered=42,
                 total_cost=17,
-                start=token_expires_delta(past=True),
+                start=get_now() + token_expires_delta(past=True),
                 end=now(),
                 payment=self.payment_choices[0],
                 protocol=self.protocol_choices[0])

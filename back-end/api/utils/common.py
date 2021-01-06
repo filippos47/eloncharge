@@ -4,7 +4,7 @@ import os
 import datetime
 
 from django.http import HttpResponse
-from django.utils.timezone import now
+from django.utils import timezone
 from .constants import AUTH_TOKEN_EXPIRES_HOURS
 
 def produce_csv_response(data):
@@ -23,11 +23,10 @@ def create_auth_token():
 def token_expires_delta(past=True, hours=None):
     if not hours:
         hours = AUTH_TOKEN_EXPIRES_HOURS
-    delta = datetime.timedelta(hours=hours)
-
-    if past:
-        return now() - delta
-    return now() + delta
+    return datetime.timedelta(hours=hours)
 
 def to_bytes(input):
     return bytes(input, 'utf-8')
+
+def get_now():
+    return timezone.now()

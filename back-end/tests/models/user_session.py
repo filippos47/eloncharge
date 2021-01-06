@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from api.models import UserSession
 
 from api.models import UserSession
-from api.utils.common import create_auth_token, token_expires_delta
+from api.utils.common import create_auth_token, token_expires_delta, get_now
 
 class UserSessionTest(TransactionTestCase):
     def setUp(self):
@@ -13,13 +13,13 @@ class UserSessionTest(TransactionTestCase):
 
     def test_expiration(self):
         token = create_auth_token()
-        expires = token_expires_delta(past=True)
+        expires = get_now() - token_expires_delta()
         session = UserSession.objects.create(user_id=self.user, token=token, expires=expires)
         session.save()
         # Check that session has expired
         self.assertTrue(session.has_expired())
 
-        expires = token_expires_delta(past=False)
+        expires = get_now() + token_expires_delta()
         token = create_auth_token()
         session = UserSession.objects.create(user_id=self.user, token=token, expires=expires)
         session.save()
@@ -29,7 +29,7 @@ class UserSessionTest(TransactionTestCase):
 
     def test_unique_token(self):
         token = create_auth_token()
-        expires = token_expires_delta(past=True)
+        expires = get_now() - token_expires_delta()
         session = UserSession.objects.create(user_id=self.user, token=token, expires=expires)
         session.save()
 
