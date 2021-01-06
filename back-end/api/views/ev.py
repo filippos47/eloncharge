@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from api.utils.common import produce_csv_response
 
 class EVView(View):
-
     def get(self, request, vehicle_id, date_from, date_to):
         # json is the default format.
         requested_format = self.request.GET.get('format', 'json')

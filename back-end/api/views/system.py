@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from api.utils.common import produce_csv_response
 
 class SystemView(View):
-
     def get(self, request):
         return JsonResponse({})
 
