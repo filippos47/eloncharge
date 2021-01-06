@@ -17,6 +17,12 @@ class TestBase(TestCase):
     def _usershow_url(self, username):
         return reverse("user_show", args=[username])
 
+    def _healthcheck_url(self):
+        return reverse("system_healthcheck")
+
+    def _reset_url(self):
+        return reverse("system_resetsessions")
+
     def _create_user(self, username, password, email="my@mail.gov", is_superuser=False):
         user = User.objects.create(username=username,
                 email=email)
