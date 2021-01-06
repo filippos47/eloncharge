@@ -6,21 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from api.models import UserSession
 from api.utils.common import token_expires_delta, create_auth_token,\
-        to_bytes, get_now
-
-def authenticated(f):
-    def check(self, request, *args, **kwargs):
-        token = request.headers.get('x-auth-observatory', None)
-
-        if not token:
-            return HttpResponseBadRequest("No token in request!")
-
-        try:
-            UserSession.objects.get(token=token, expires__gte=get_now())
-        except ObjectDoesNotExist:
-            return HttpResponse("Unauthorized: Expired session. Renew token!", status=401)
-        return f(self, request, *args, **kwargs)
-    return check
+        get_now
+from api.utils.auth import authenticated
 
 class LoginView(View):
     def post(self, request):
@@ -52,7 +39,7 @@ class LoginView(View):
         return JsonResponse({'token': str(session.token)})
 
 class LogoutView(View):
-    @authenticated
+    @authenticated()
     def post(self, request):
         token = request.headers.get('x-auth-observatory', None)
         session = UserSession.objects.get(token=token)

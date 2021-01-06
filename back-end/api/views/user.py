@@ -1,11 +1,24 @@
-import csv
-
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
+from api.utils.auth import authenticated
 
 class UserView(View):
+    @authenticated(superuser=True)
     def post(self, request, username, password):
-        return JsonResponse({'username': username, 'password': password})
+        user = User.objects.get_or_create(username=username)[0]
 
+        user.set_password(password)
+        user.save()
+        return HttpResponse(status=200)
+
+    @authenticated()
     def get(self, request, username):
-        return JsonResponse({'username': username})
+        try:
+            user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            return HttpResponse("No Data: User does not exist.", status=402)
+
+        return JsonResponse({'username': user.username})

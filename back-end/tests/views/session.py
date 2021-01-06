@@ -1,36 +1,20 @@
 import json
 
-from django.test import TestCase, Client
-from django.urls import reverse
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 
 from api.models import UserSession
 from api.utils.common import get_now
 
-class SessionTestBase(TestCase):
+from .base import TestBase
+
+class LoginViewTest(TestBase):
     def setUp(self):
-        self.login_url = reverse("session_login")
-        self.logout_url = reverse("session_logout")
         self.username = "martin"
         self.password = "luther"
-        self.user = User.objects.create(username=self.username,
-                email="king@jr.gov")
-        self.user.set_password(self.password)
-        self.user.save()
+        self.user = self._create_user(self.username, self.password)
 
-    def _login(self, username, password):
-        return self.client.post(self.login_url,
-                "username="+username+"&password="+password,
-                content_type="application/x-www-form-urlencoded")
-
-    def _extract_token(self, resp):
-        return json.loads(resp.content)['token']
-
-    def _logout(self, token):
-        return self.client.post(self.logout_url, HTTP_X_AUTH_OBSERVATORY=token)
-
-class LoginViewTest(SessionTestBase):
     def test_login_valid(self):
         resp = self._login(self.username, self.password)
 
@@ -58,16 +42,20 @@ class LoginViewTest(SessionTestBase):
 
     def test_login_existing_token(self):
         # retrieve token
-        token1 = self._extract_token(self._login(self.username, self.password))
+        token1 = self._login_and_get_token(self.username, self.password)
 
         # redo request and check that the token remains the same
-        token2 = self._extract_token(self._login(self.username, self.password))
+        token2 = self._login_and_get_token(self.username, self.password)
         self.assertEqual(token1, token2)
 
-class LogoutViewTest(SessionTestBase):
-    def test_logout_valid(self):
-        token = self._extract_token(self._login(self.username, self.password))
+class LogoutViewTest(TestBase):
+    def setUp(self):
+        self.username = "martin"
+        self.password = "luther"
+        self.user = self._create_user(self.username, self.password)
 
+    def test_logout_valid(self):
+        token = self._login_and_get_token(self.username, self.password)
         resp = self._logout(token)
 
         self.assertEqual(resp.status_code, 200)
@@ -77,9 +65,9 @@ class LogoutViewTest(SessionTestBase):
         self.assertTrue(session.expires < get_now())
 
     def test_logout_without_token(self):
-        resp = self.client.post(self.logout_url)
+        resp = self.client.post(self._logout_url())
 
-        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.status_code, 401)
 
     def test_logout_invalid_token(self):
         resp = self._logout("idonotexisthahah")
