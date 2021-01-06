@@ -1,6 +1,7 @@
 from django.views import View
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -34,8 +35,12 @@ class LoginView(View):
         user = authenticate(username=username, password=password)
 
         if not user:
-            return HttpResponseBadRequest("Credentials invalid" +\
-                    "or user does not exist.")
+            try:
+                User.objects.get(username=username)
+                msg = "Invalid password."
+            except ObjectDoesNotExist:
+                msg = "User does not exist."
+            return HttpResponseBadRequest(msg)
 
         # get existing token or remove old one
         try:
