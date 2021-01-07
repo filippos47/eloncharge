@@ -35,4 +35,4 @@ def datetime_to_string(dt):
     return dt.strftime(DATETIME_FORMAT)
 
 def datetime_from_string(st):
-    return timezone.make_aware(datetime.datetime.strptime(st, DATETIME_FORMAT), pytz.utc)
+    return timezone.make_aware(datetime.datetime.strptime(st, DATETIME_FORMAT))
