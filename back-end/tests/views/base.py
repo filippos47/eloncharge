@@ -34,6 +34,9 @@ class TestBase(TestCase):
     def _point_url(self, point_id, start, end):
         return reverse("point_sessions", args=[point_id, start, end])
 
+    def _station_url(self, station_id, start, end):
+        return reverse("station_sessions", args=[station_id, start, end])
+
     def _create_user(self, username, password, email="my@mail.gov", is_superuser=False):
         user = User.objects.create(username=username,
                 email=email)
