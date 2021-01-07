@@ -1,8 +1,13 @@
 import json
+import pytz
+import datetime
 
 from django.test import TestCase
 from django.urls import reverse
+from django.conf import settings
 from django.contrib.auth.models import User
+
+from api.utils.common import datetime_to_string
 
 class TestBase(TestCase):
     def _login_url(self):
@@ -22,6 +27,9 @@ class TestBase(TestCase):
 
     def _reset_url(self):
         return reverse("system_resetsessions")
+
+    def _ev_url(self, ev_id, start, end):
+        return reverse("ev_sessions", args=[ev_id, start, end])
 
     def _create_user(self, username, password, email="my@mail.gov", is_superuser=False):
         user = User.objects.create(username=username,
@@ -50,4 +58,21 @@ class TestBase(TestCase):
 
     def _retrieve_user(self, username, token):
         return self.client.get(self._usershow_url(username),
+                    HTTP_X_AUTH_OBSERVATORY=token)
+
+    def _current_time(self, dt):
+        curr_tz = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        offset = curr_tz.utcoffset().total_seconds() / 60 / 60
+
+        return dt + datetime.timedelta(hours=offset)
+
+    def _retrieve_sessions(self, url, token, id, fr, to, csv=False):
+        fr = datetime_to_string(self._current_time(fr))
+        to = datetime_to_string(self._current_time(to))
+
+        format = "json"
+        if csv:
+            format = "csv"
+
+        return self.client.get(url(id, fr, to) + "?format="+format,
                     HTTP_X_AUTH_OBSERVATORY=token)
