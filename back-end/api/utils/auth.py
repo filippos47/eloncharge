@@ -20,6 +20,6 @@ def authenticated(superuser=False):
             if superuser and not session.user_id.is_superuser:
                 return HttpResponse("Unauthorized: Requires admin access", status=401)
 
-            return f(self, request, *args, **kwargs)
+            return f(self, request, session.user_id, *args, **kwargs)
         return check
     return func

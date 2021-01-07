@@ -40,7 +40,7 @@ class LoginView(View):
 
 class LogoutView(View):
     @authenticated()
-    def post(self, request):
+    def post(self, request, user):
         token = request.headers.get('x-auth-observatory', None)
         session = UserSession.objects.get(token=token)
         session.expires = get_now()

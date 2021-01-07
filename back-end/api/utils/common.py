@@ -1,12 +1,13 @@
 import csv
 import base64
+import pytz
 import os
 import datetime
 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
 
-from .constants import AUTH_TOKEN_EXPIRES_HOURS
+from .constants import AUTH_TOKEN_EXPIRES_HOURS, DATETIME_FORMAT
 
 def produce_csv_response(data):
     # data: list of lists
@@ -29,3 +30,9 @@ def token_expires_delta(past=True, hours=None):
 
 def get_now():
     return timezone.now()
+
+def datetime_to_string(dt):
+    return dt.strftime(DATETIME_FORMAT)
+
+def datetime_from_string(st):
+    return timezone.make_aware(datetime.datetime.strptime(st, DATETIME_FORMAT), pytz.utc)
