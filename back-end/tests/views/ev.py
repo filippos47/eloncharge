@@ -12,9 +12,6 @@ from api.models import Car, ChargeSession, Station, Point, Pricing
 from django.utils import timezone
 
 class EVViewTest(TestBase):
-    def _get_prev_days(self, days):
-        return get_now() - datetime.timedelta(days=days)
-
     def setUp(self):
         self.user = self._create_user("martin", "luther")
         self.car = Car.objects.create(user_id=self.user, licence="something")

@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from api.utils.common import datetime_to_string
+from api.utils.common import datetime_to_string, get_now
 
 class TestBase(TestCase):
     def _login_url(self):
@@ -31,12 +31,18 @@ class TestBase(TestCase):
     def _ev_url(self, ev_id, start, end):
         return reverse("ev_sessions", args=[ev_id, start, end])
 
+    def _point_url(self, point_id, start, end):
+        return reverse("point_sessions", args=[point_id, start, end])
+
     def _create_user(self, username, password, email="my@mail.gov", is_superuser=False):
         user = User.objects.create(username=username,
                 email=email)
         user.set_password(password)
         user.save()
         return user
+
+    def _get_prev_days(self, days):
+        return get_now() - datetime.timedelta(days=days)
 
     def _login(self, username, password):
         return self.client.post(self._login_url(),
