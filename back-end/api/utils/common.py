@@ -9,13 +9,27 @@ from django.utils import timezone
 
 from .constants import AUTH_TOKEN_EXPIRES_HOURS, DATETIME_FORMAT
 
-def produce_csv_response(data):
-    # data: list of lists
+def produce_csv_response(resp, root_keys, lst_keys, lst_name):
+    """
+    Takes as input a dictionary that contains some common values (specified by root_keys)
+    and a list of changing values (specified by lst_keys).
+    Iterates the list of changing values and outputs each time a row
+    containing the common values along with the changing ones.
+    """
 
     csv_response = HttpResponse(content_type='text.csv')
     csv_response['Content-Disposition'] = 'attachment; filename="out.csv"'
-    writer = csv.writer(csv_response)
-    writer.writerows(data)
+
+    writer = csv.writer(csv_response, delimiter=",")
+
+    writer.writerow(root_keys + lst_keys)
+    for item in resp[lst_name]:
+        row = []
+        for k in root_keys:
+            row.append(resp[k])
+        for k in lst_keys:
+            row.append(item[k])
+        writer.writerow(row)
 
     return csv_response
 

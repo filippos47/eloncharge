@@ -59,10 +59,10 @@ class StationView(View):
                 resp['TotalEnergyDelivered'] += energy_delivered
 
         if requested_format == 'csv':
-            # TODO: proper csv response
-            data = [['StationID', 'PeriodFrom', 'PeriodTo'],
-                    [station_id, date_from, date_to]]
-            return produce_csv_response(data)
+            root_keys = ["StationID", "Operator", "RequestTimestamp", "PeriodFrom", "PeriodTo",
+                    "TotalEnergyDelivered", "NumberOfChargingSessions", "NumberOfActivePoints"]
+            lst_keys = ["PointID", "PointSessions", "EnergyDelivered"]
+            return produce_csv_response(resp, root_keys, lst_keys, "SessionsSummaryList")
         elif requested_format == "json":
             return JsonResponse(resp)
         else:

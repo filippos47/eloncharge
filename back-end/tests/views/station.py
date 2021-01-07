@@ -1,4 +1,5 @@
 import json
+import csv
 import datetime
 
 from django.test import TestCase
@@ -113,6 +114,35 @@ class StationViewTest(TestBase):
         self.assertTrue(second.get('EnergyDelivered', False))
         self.assertEqual(second['EnergyDelivered'], 30)
 
+    def test_get_station_charges_csv(self):
+        resp = self._retrieve_sessions(self._station_url, self.token,
+                self.station.id, self.days[4], self.days[0], csv=True)
+
+        self.assertEqual(resp.status_code, 200)
+        reader = csv.reader(resp.content.decode('utf-8').splitlines(), delimiter=",")
+
+        items = list(reader)
+
+        self.assertEqual(len(items), 3)
+        for idx, item in enumerate(reader):
+            if idx == 0:
+                self.assertEqual(item,
+                        ["StationID", "Operator", "RequestTimestamp",
+                        "PeriodFrom", "PeriodTo", "TotalEnergyDelivered",
+                        "NumberOfChargingSessions", "NumberOfActivePoints",
+                        "PointID", "PointSessions", "EnergyDelivered"])
+            else:
+                self.assertEqual(item[0], self.station.id)
+                self.assertEqual(item[1], self.operator.username)
+                if idx == 1:
+                    self.assertEqual(item[8], self.point1.id)
+                    self.assertEqual(item[9], 2)
+                    self.assertEqual(item[10], 30)
+                elif idx == 2:
+                    self.assertEqual(item[8], self.point2.id)
+                    self.assertEqual(item[9], 1)
+                    self.assertEqual(item[10], 30)
+
     def test_get_unauthorized(self):
         user2 = self._create_user("someone", "else")
         token2 = self._login_and_get_token(user2.username, "else")
@@ -123,10 +153,6 @@ class StationViewTest(TestBase):
         # should be unauthorized
         self.assertEqual(resp.status_code, 401)
         self.assertTrue(isinstance(resp, HttpResponse))
-
-    def test_get_station_charges_csv(self):
-        # TODO
-        self.fail("Implement me!")
 
     def test_invalid_dates(self):
         resp = self._retrieve_sessions(self._station_url, self.token,

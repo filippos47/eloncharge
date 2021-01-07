@@ -62,10 +62,11 @@ class EVView(View):
 
 
         if requested_format == 'csv':
-            # TODO: proper csv response
-            data = [['VehicleID', 'PeriodFrom', 'PeriodTo'],
-                    [vehicle_id, date_from, date_to]]
-            return produce_csv_response(data)
+            root_keys = ["VehicleID", "RequestTimestamp", "PeriodFrom", "PeriodTo",
+                    "TotalEnergyConsumed", "NumberOfVisitedPoints", "NumberOfVehicleChargingSessions"]
+            lst_keys = ["SessionIndex", "SessionID", "EnergyProvider", "StartedOn", "FinishedOn",
+                    "EnergyDelivered", "PricePolicyRef", "CostPerKWh", "SessionCost"]
+            return produce_csv_response(resp, root_keys, lst_keys, "VehicleChargingSessionsList")
         elif requested_format == "json":
             return JsonResponse(resp)
         else:

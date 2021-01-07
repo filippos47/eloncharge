@@ -56,10 +56,11 @@ class PointView(View):
             })
 
         if requested_format == 'csv':
-            # TODO: proper csv response
-            data = [['PointID', 'PeriodFrom', 'PeriodTo'],
-                    [point_id, date_from, date_to]]
-            return produce_csv_response(data)
+            root_keys = ["Point", "PointOperator", "RequestTimestamp", "PeriodFrom", "PeriodTo",
+                    "NumberOfChargingSessions"]
+            lst_keys = ["SessionIndex", "SessionID", "StartedOn", "FinishedOn", "Protocol",
+                    "EnergyDelivered", "Payment", "VehicleType"]
+            return produce_csv_response(resp, root_keys, lst_keys, "ChargingSessionsList")
         elif requested_format == "json":
             return JsonResponse(resp)
         else:
