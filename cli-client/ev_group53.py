@@ -1,6 +1,37 @@
 import argparse
 import sys
 
+from functions.login import login
+from functions.logout import logout
+from functions.user import usermod, users
+from functions.system import healthcheck, sessionupd, resetsessions
+from functions.point import sessions_per_point
+from functions.station import sessions_per_station
+from functions.ev import sessions_per_ev
+
+FUNCTION_MAP = {'healthcheck': healthcheck,
+                'resetsessions': resetsessions,
+                'login': login,
+                'logout': logout,
+                'SessionsPerPoint': sessions_per_point,
+                'SessionsPerStation': sessions_per_station,
+                'SessionsPerEV': sessions_per_ev}
+
+def function_caller(args):
+    if args.command != "Admin":
+        FUNCTION_MAP[args.command](args)
+    else:
+        if args.usermod:
+            usermod(args)
+        elif args.users:
+            users(args)
+        elif args.sessionupd:
+            sessionupd(args)
+        elif args.healthcheck:
+            healthcheck(args)
+        elif args.resetsessions:
+            resetsessions(args)
+
 def broken_admin_dependencies(args):
     usermod_violation = (args.usermod == True and
                          (args.username == None or args.passw == None))
@@ -10,7 +41,6 @@ def broken_admin_dependencies(args):
     if usermod_violation or sessionupd_violation:
         return True
     return False
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -165,7 +195,7 @@ def main():
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
         sys.exit(1)
-    elif broken_admin_dependencies(args):
+    elif args.command == "Admin" and broken_admin_dependencies(args):
         admin_parser.print_help(sys.stderr)
         sys.exit(1)
 
