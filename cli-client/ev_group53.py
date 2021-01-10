@@ -1,8 +1,7 @@
 import argparse
 import sys
 
-from functions.login import login
-from functions.logout import logout
+from functions.session import login, logout
 from functions.user import usermod, users
 from functions.system import healthcheck, sessionupd, resetsessions
 from functions.point import sessions_per_point
