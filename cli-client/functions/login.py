@@ -1,2 +1,2 @@
 def login(args):
-    pass
+    print("login")

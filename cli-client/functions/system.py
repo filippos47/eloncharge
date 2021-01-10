@@ -1,8 +1,8 @@
 def healthcheck(args):
-    pass
+    print("healthcheck")
 
 def sessionupd(args):
-    pass
+    print("sessionupd")
 
 def resetsessions(args):
-    pass
+    print("resetsessions")

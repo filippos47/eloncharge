@@ -1,2 +1,2 @@
 def sessions_per_station(args):
-    pass
+    print("sessions_per_station")

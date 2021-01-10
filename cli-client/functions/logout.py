@@ -1,2 +1,2 @@
 def logout(args):
-    pass
+    print("logout")

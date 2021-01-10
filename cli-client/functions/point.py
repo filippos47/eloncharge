@@ -1,2 +1,2 @@
 def sessions_per_point(args):
-    pass
+    print("sessions_per_point")

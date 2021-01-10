@@ -199,5 +199,7 @@ def main():
         admin_parser.print_help(sys.stderr)
         sys.exit(1)
 
+    function_caller(args)
+
 if __name__ == "__main__":
     main()

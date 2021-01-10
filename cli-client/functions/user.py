@@ -1,5 +1,5 @@
 def usermod(args):
-    pass
+    print("usermod")
 
 def users(args):
-    pass
+    print("users")
