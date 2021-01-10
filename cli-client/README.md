@@ -21,7 +21,7 @@ The below commands have been tested on Ubuntu LTS 18.04.
 3. Install requirements
 
     ```bash
-    $ pip3 install requirements
+    $ pip3 install -r requirements.txt
     ```
 
 4. Generate distribution package
