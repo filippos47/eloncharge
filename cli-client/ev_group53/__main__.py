@@ -1,24 +1,24 @@
 import argparse
 import sys
 
-from functions.session import login, logout
-from functions.user import usermod, users
-from functions.system import healthcheck, sessionupd, resetsessions
-from functions.point import sessions_per_point
-from functions.station import sessions_per_station
-from functions.ev import sessions_per_ev
+from ev_group53.methods.session import login, logout
+from ev_group53.methods.user import usermod, users
+from ev_group53.methods.system import healthcheck, sessionupd, resetsessions
+from ev_group53.methods.point import sessions_per_point
+from ev_group53.methods.station import sessions_per_station
+from ev_group53.methods.ev import sessions_per_ev
 
-FUNCTION_MAP = {'healthcheck': healthcheck,
-                'resetsessions': resetsessions,
-                'login': login,
-                'logout': logout,
-                'SessionsPerPoint': sessions_per_point,
-                'SessionsPerStation': sessions_per_station,
-                'SessionsPerEV': sessions_per_ev}
+METHOD_MAP = {'healthcheck': healthcheck,
+              'resetsessions': resetsessions,
+              'login': login,
+              'logout': logout,
+              'SessionsPerPoint': sessions_per_point,
+              'SessionsPerStation': sessions_per_station,
+              'SessionsPerEV': sessions_per_ev}
 
 def function_caller(args):
     if args.command != "Admin":
-        FUNCTION_MAP[args.command](args)
+        METHOD_MAP[args.command](args)
     else:
         if args.usermod:
             usermod(args)
