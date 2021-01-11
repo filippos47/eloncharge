@@ -8,6 +8,7 @@
 - Renamed `Charge` table to `ChargeSession`.
 - Removed `Card` table.
 - Removed `UserCar` table.
+- Removed `ChargeEvents` table.
 
 ## Detailed overview
 
