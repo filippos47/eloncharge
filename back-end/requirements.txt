@@ -1,2 +1,4 @@
 Django==3.1.5
 psycopg2-binary==2.8.6
+Faker==5.5.1
+faker-vehicle==0.2.0

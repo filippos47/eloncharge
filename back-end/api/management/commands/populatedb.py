@@ -36,11 +36,7 @@ ADDRESSES = ["Kyklaminwn", "Vederiotaki", "Thiseos", "Anthewn", "Billysiotakh",
              "Arxigou", "Virwnos"]
 
 class Command(BaseCommand):
-    help = "Populate database"
     requires_migration_checks = True
-
-    def add_arguments(self, parser):
-        pass
 
     def handle(self, *args, **options):
         fake = Faker()
@@ -91,7 +87,7 @@ class Command(BaseCommand):
                     latitude=place[1],
                     longtitude=place[2],
                     address=street,
-                    number=fake.building_number(),
+                    number=random.randint(1, 500),
                     zipcode=fake.postcode(),
                     city=place[0],
                     region="Attica",
