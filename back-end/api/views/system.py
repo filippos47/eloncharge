@@ -42,9 +42,10 @@ class SystemView(View):
         # delete all charge session objects
         if self._check_connectivity():
             ChargeSession.objects.all().delete()
+            User.objects.filter(username="admin").delete()
 
-            user = User.objects.get_or_create(username="admin")[0]
-            user.set_password("petrol4ever")
+            user = User.objects.create_superuser("admin", \
+                                                 password="petrol4ever")
             user.save()
             status = "OK"
         else:
