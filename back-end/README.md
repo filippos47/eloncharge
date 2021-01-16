@@ -66,6 +66,12 @@ The below commands have been tested on Ubuntu LTS 18.04.
     $ python3 manage.py migrate
     ```
 
+7. Populate database (optional)
+
+    ```bash
+    $ python3 manage.py populatedb
+    ```
+
 ## Usage
 
 - Start Django backend, listening at http://localhost:8765
