@@ -13,6 +13,11 @@ def authenticated(superuser=False):
                 return HttpResponse("Unauthorized: An access token is required.", status=401)
 
             try:
+                session = UserSession.objects.get(token=token)
+            except ObjectDoesNotExist:
+                return HttpResponse("Unauthorized: Non-existent session.")
+
+            try:
                 session = UserSession.objects.get(token=token, expires__gte=get_now())
             except ObjectDoesNotExist:
                 return HttpResponse("Unauthorized: Expired session. Renew token!", status=401)

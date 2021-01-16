@@ -14,17 +14,11 @@ class UserView(View):
         user.save()
         return HttpResponse(status=200)
 
-    @authenticated()
+    @authenticated(superuser=True)
     def get(self, request, user, username):
-        # if admin, retrieve whatever they want
-        if user.is_superuser:
-            try:
-                req_user = User.objects.get(username=username)
-            except ObjectDoesNotExist:
-                return HttpResponse("No Data: User does not exist.", status=402)
-        else:
-            if user.username != username:
-                return HttpResponse("Unauthorized. You are not that user.", status=401)
-            req_user = user
+        try:
+            req_user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            return HttpResponse("No Data: User does not exist.", status=402)
 
         return JsonResponse({'username': req_user.username})

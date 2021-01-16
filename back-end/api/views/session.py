@@ -45,4 +45,4 @@ class LogoutView(View):
         session = UserSession.objects.get(token=token)
         session.expires = get_now()
         session.save()
-        return HttpResponse()
+        return JsonResponse()
