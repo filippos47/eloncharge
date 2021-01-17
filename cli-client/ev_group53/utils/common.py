@@ -1,5 +1,6 @@
 from os.path import expanduser
 from os import remove
+import requests
 
 from .constants import BASE_URL, TOKEN_FILENAME
 
@@ -23,3 +24,13 @@ def delete_token_file():
         remove(token_filepath)
     except OSError:
         pass
+
+def place_request(method, url, data={}, token=None):
+    if token:
+        headers = {'X-AUTH-OBSERVATORY': token}
+    else:
+        headers = {}
+
+    requests_method = getattr(requests, method)
+    response = requests_method(url, data=data, headers=headers)
+    return response

@@ -16,20 +16,22 @@ METHOD_MAP = {'healthcheck': healthcheck,
               'SessionsPerStation': sessions_per_station,
               'SessionsPerEV': sessions_per_ev}
 
-def function_caller(args):
+def method_caller(args):
     if args.command != "Admin":
-        METHOD_MAP[args.command](args)
+        response_text = METHOD_MAP[args.command](args)
     else:
         if args.usermod:
-            usermod(args)
+            response_text = usermod(args)
         elif args.users:
-            users(args)
+            response_text = users(args)
         elif args.sessionupd:
-            sessionupd(args)
+            response_text = sessionupd(args)
         elif args.healthcheck:
-            healthcheck(args)
+            response_text = healthcheck(args)
         elif args.resetsessions:
-            resetsessions(args)
+            response_text = resetsessions(args)
+
+    print(response_text)
 
 def broken_admin_dependencies(args):
     usermod_violation = (args.usermod == True and
@@ -173,12 +175,12 @@ def main():
     )
     admin_parser.add_argument(
         "--username",
-        help="enter username",
+        help="enter username (alphanumeric latin characters only)",
         default=None
     )
     admin_parser.add_argument(
         "--passw",
-        help="enter password",
+        help="enter password (must not be an empty string)",
         default=None
     )
     admin_parser.add_argument(
@@ -198,7 +200,7 @@ def main():
         admin_parser.print_help(sys.stderr)
         sys.exit(1)
 
-    function_caller(args)
+    method_caller(args)
 
 if __name__ == "__main__":
     main()
