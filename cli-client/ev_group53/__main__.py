@@ -17,6 +17,7 @@ METHOD_MAP = {'healthcheck': healthcheck,
               'SessionsPerEV': sessions_per_ev}
 
 def method_caller(args):
+    # TODO: Check file for api token if parameter not set
     if args.command != "Admin":
         response_text = METHOD_MAP[args.command](args)
     else:
@@ -31,6 +32,7 @@ def method_caller(args):
         elif args.resetsessions:
             response_text = resetsessions(args)
 
+    # TODO: format response if json
     print(response_text)
 
 def broken_admin_dependencies(args):
@@ -47,7 +49,7 @@ def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help="Available functionalities",
         dest="command")
-   
+
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument(
         "--format",
@@ -188,7 +190,7 @@ def main():
         help="csv filename",
         default=None
     )
- 
+
     args = parser.parse_args()
 
     print(args)

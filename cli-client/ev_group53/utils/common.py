@@ -26,10 +26,9 @@ def delete_token_file():
         pass
 
 def place_request(method, url, data={}, token=None):
+    headers = {}
     if token:
         headers = {'X-AUTH-OBSERVATORY': token}
-    else:
-        headers = {}
 
     requests_method = getattr(requests, method)
     response = requests_method(url, data=data, headers=headers)
