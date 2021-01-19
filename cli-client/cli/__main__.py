@@ -1,12 +1,12 @@
 import argparse
 import sys
 
-from ev_group53.methods.session import login, logout
-from ev_group53.methods.user import usermod, users
-from ev_group53.methods.system import healthcheck, sessionupd, resetsessions
-from ev_group53.methods.point import sessions_per_point
-from ev_group53.methods.station import sessions_per_station
-from ev_group53.methods.ev import sessions_per_ev
+from cli.methods.session import login, logout
+from cli.methods.user import usermod, users
+from cli.methods.system import healthcheck, sessionupd, resetsessions
+from cli.methods.point import sessions_per_point
+from cli.methods.station import sessions_per_station
+from cli.methods.ev import sessions_per_ev
 
 METHOD_MAP = {'healthcheck': healthcheck,
               'resetsessions': resetsessions,
@@ -32,7 +32,6 @@ def method_caller(args):
         elif args.resetsessions:
             response_text = resetsessions(args)
 
-    # TODO: format response if json
     print(response_text)
 
 def broken_admin_dependencies(args):

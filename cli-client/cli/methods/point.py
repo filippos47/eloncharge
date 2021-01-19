@@ -1,4 +1,4 @@
-from ev_group53.utils.common import produce_url, place_request
+from cli.utils.common import produce_url, place_request
 
 def sessions_per_point(args):
     url = produce_url(

@@ -10,6 +10,9 @@ class TestBase(TestCase):
         def __init__(self, text):
             self.text = text
 
+        def json(self):
+            return self.text
+
     def _get_header(self, token=None):
         if not token:
             return {}

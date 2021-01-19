@@ -1,4 +1,4 @@
-from ev_group53.utils.common import (
+from cli.utils.common import (
         produce_url, place_request,
         create_token_file, delete_token_file,
 )
