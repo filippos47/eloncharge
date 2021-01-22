@@ -1,78 +1,40 @@
 import argparse
 import sys
 
-from cli.methods.session import login, logout
-from cli.methods.user import usermod, users
-from cli.methods.system import healthcheck, sessionupd, resetsessions
-from cli.methods.point import sessions_per_point
-from cli.methods.station import sessions_per_station
-from cli.methods.ev import sessions_per_ev
-
-METHOD_MAP = {'healthcheck': healthcheck,
-              'resetsessions': resetsessions,
-              'login': login,
-              'logout': logout,
-              'SessionsPerPoint': sessions_per_point,
-              'SessionsPerStation': sessions_per_station,
-              'SessionsPerEV': sessions_per_ev}
-
-def method_caller(args):
-    # TODO: Check file for api token if parameter not set
-    if args.command != "Admin":
-        response_text = METHOD_MAP[args.command](args)
-    else:
-        if args.usermod:
-            response_text = usermod(args)
-        elif args.users:
-            response_text = users(args)
-        elif args.sessionupd:
-            response_text = sessionupd(args)
-        elif args.healthcheck:
-            response_text = healthcheck(args)
-        elif args.resetsessions:
-            response_text = resetsessions(args)
-
-    print(response_text)
-
-def broken_admin_dependencies(args):
-    usermod_violation = (args.usermod == True and
-                         (args.username == None or args.passw == None))
-    sessionupd_violation = (args.sessionupd == True and
-                            args.source == None)
-
-    if usermod_violation or sessionupd_violation:
-        return True
-    return False
+from cli.utils.parsing import (
+        method_caller,
+        broken_admin_dependencies,
+        apikey_present_if_required,
+)
 
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help="Available functionalities",
         dest="command")
 
-    parent_parser = argparse.ArgumentParser(add_help=False)
-    parent_parser.add_argument(
+    format_parser = argparse.ArgumentParser(add_help=False)
+    format_parser.add_argument(
         "--format",
         help="select desired output format (supported: csv, json)",
         choices=["csv", "json"],
         required=True
     )
-    parent_parser.add_argument(
+
+    apikey_parser = argparse.ArgumentParser(add_help=False)
+    apikey_parser.add_argument(
         "--apikey",
-        help="provide API token",
-        required=True
+        help="provide API token (or populate ~/softeng20bAPI.token)",
+        default=None
     )
 
     healthcheck_parser = subparsers.add_parser("healthcheck",
-        help="perform system healthcheck",
-        parents=[parent_parser])
+        help="perform system healthcheck")
 
     resetsessions_parser = subparsers.add_parser("resetsessions",
-        help="reset charge sessions",
-        parents=[parent_parser])
+        help="reset charge sessions")
 
     login_parser = subparsers.add_parser("login",
-        help="login using your credentials",
-        parents=[parent_parser])
+        help="login using your credentials")
     login_parser.add_argument(
         "--username",
         help="enter your username",
@@ -86,11 +48,11 @@ def main():
 
     logout_parser = subparsers.add_parser("logout",
         help="logout",
-        parents=[parent_parser])
+        parents=[apikey_parser])
 
     sessions_per_point_parser = subparsers.add_parser("SessionsPerPoint",
         help="show selected point's charge sessions for specific interval",
-        parents=[parent_parser])
+        parents=[format_parser, apikey_parser])
     sessions_per_point_parser.add_argument(
         "--point",
         help="specify point",
@@ -109,7 +71,7 @@ def main():
 
     sessions_per_station_parser = subparsers.add_parser("SessionsPerStation",
         help="show selected station's charge sessions for specific interval",
-        parents=[parent_parser])
+        parents=[format_parser, apikey_parser])
     sessions_per_station_parser.add_argument(
         "--station",
         help="specify station",
@@ -128,7 +90,7 @@ def main():
 
     sessions_per_ev_parser = subparsers.add_parser("SessionsPerEV",
         help="show EV's charge sessions for specific interval",
-        parents=[parent_parser])
+        parents=[format_parser, apikey_parser])
     sessions_per_ev_parser.add_argument(
         "--ev",
         help="specify ev",
@@ -147,7 +109,7 @@ def main():
 
     admin_parser = subparsers.add_parser("Admin",
         help="perform administrative operations",
-        parents=[parent_parser])
+        parents=[format_parser, apikey_parser])
     admin_group = admin_parser.add_mutually_exclusive_group(required=True)
     admin_group.add_argument(
         "--usermod",
@@ -191,8 +153,11 @@ def main():
     )
 
     args = parser.parse_args()
-
-    print(args)
+    PARSER_MAP = {"logout": logout_parser,
+              'SessionsPerPoint': sessions_per_point_parser,
+              'SessionsPerStation': sessions_per_station_parser,
+              'SessionsPerEV': sessions_per_ev_parser,
+              'Admin': admin_parser}
 
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
@@ -200,8 +165,12 @@ def main():
     elif args.command == "Admin" and broken_admin_dependencies(args):
         admin_parser.print_help(sys.stderr)
         sys.exit(1)
+    elif not apikey_present_if_required(args):
+        parser_scope = PARSER_MAP[args.command]
+        parser_scope.print_help(sys.stderr)
+        sys.exit(1)
 
-    method_caller(args)
+    print(method_caller(args))
 
 if __name__ == "__main__":
     main()

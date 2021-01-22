@@ -13,13 +13,16 @@ def produce_url(service, path_to_resource=None, requested_format=None):
 
     return url
 
+def generate_token_filepath():
+    return expanduser("~") + "/" + TOKEN_FILENAME
+
 def create_token_file(token):
-    token_filepath = expanduser("~") + "/" + TOKEN_FILENAME
+    token_filepath = generate_token_filepath()
     with open(token_filepath, "w") as fp:
         fp.write(token)
 
 def delete_token_file():
-    token_filepath = expanduser("~") + "/" + TOKEN_FILENAME
+    token_filepath = generate_token_filepath()
     try:
         remove(token_filepath)
     except OSError:
