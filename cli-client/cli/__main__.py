@@ -1,12 +1,12 @@
 import argparse
 import sys
 
-from ev_group53.methods.session import login, logout
-from ev_group53.methods.user import usermod, users
-from ev_group53.methods.system import healthcheck, sessionupd, resetsessions
-from ev_group53.methods.point import sessions_per_point
-from ev_group53.methods.station import sessions_per_station
-from ev_group53.methods.ev import sessions_per_ev
+from cli.methods.session import login, logout
+from cli.methods.user import usermod, users
+from cli.methods.system import healthcheck, sessionupd, resetsessions
+from cli.methods.point import sessions_per_point
+from cli.methods.station import sessions_per_station
+from cli.methods.ev import sessions_per_ev
 
 METHOD_MAP = {'healthcheck': healthcheck,
               'resetsessions': resetsessions,
@@ -16,20 +16,23 @@ METHOD_MAP = {'healthcheck': healthcheck,
               'SessionsPerStation': sessions_per_station,
               'SessionsPerEV': sessions_per_ev}
 
-def function_caller(args):
+def method_caller(args):
+    # TODO: Check file for api token if parameter not set
     if args.command != "Admin":
-        METHOD_MAP[args.command](args)
+        response_text = METHOD_MAP[args.command](args)
     else:
         if args.usermod:
-            usermod(args)
+            response_text = usermod(args)
         elif args.users:
-            users(args)
+            response_text = users(args)
         elif args.sessionupd:
-            sessionupd(args)
+            response_text = sessionupd(args)
         elif args.healthcheck:
-            healthcheck(args)
+            response_text = healthcheck(args)
         elif args.resetsessions:
-            resetsessions(args)
+            response_text = resetsessions(args)
+
+    print(response_text)
 
 def broken_admin_dependencies(args):
     usermod_violation = (args.usermod == True and
@@ -45,7 +48,7 @@ def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help="Available functionalities",
         dest="command")
-   
+
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument(
         "--format",
@@ -173,12 +176,12 @@ def main():
     )
     admin_parser.add_argument(
         "--username",
-        help="enter username",
+        help="enter username (alphanumeric latin characters only)",
         default=None
     )
     admin_parser.add_argument(
         "--passw",
-        help="enter password",
+        help="enter password (must not be an empty string)",
         default=None
     )
     admin_parser.add_argument(
@@ -186,7 +189,7 @@ def main():
         help="csv filename",
         default=None
     )
- 
+
     args = parser.parse_args()
 
     print(args)
@@ -198,7 +201,7 @@ def main():
         admin_parser.print_help(sys.stderr)
         sys.exit(1)
 
-    function_caller(args)
+    method_caller(args)
 
 if __name__ == "__main__":
     main()

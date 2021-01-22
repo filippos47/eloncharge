@@ -5,9 +5,8 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 
 from api.models import UserSession
-from api.utils.common import token_expires_delta, create_auth_token,\
-        get_now
-from api.utils.auth import authenticated
+from api.utils.common import get_now
+from api.utils.auth import authenticated, get_or_create_session
 
 class LoginView(View):
     def post(self, request):
@@ -27,14 +26,7 @@ class LoginView(View):
                 msg = "User does not exist."
             return HttpResponse("Unauthorized: " + msg, status=401)
 
-        # get existing token or remove old one
-        try:
-            session = UserSession.objects.get(user_id=user.id, expires__gte=get_now())
-        except ObjectDoesNotExist:
-            date_to = get_now() + token_expires_delta()
-            token = create_auth_token()
-            session = UserSession.objects.create(user_id=user, token=token, expires=date_to)
-            session.save()
+        session = get_or_create_session(user)
 
         return JsonResponse({'token': str(session.token)})
 

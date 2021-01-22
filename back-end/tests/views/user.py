@@ -21,7 +21,6 @@ class UserViewTest(TestBase):
         resp = self._update_user(self.username, self.password, self.token)
 
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.content), 0)
         self.assertTrue(isinstance(resp, HttpResponse))
 
         # attempt to retrieve user, this will fail if user not created
@@ -36,7 +35,6 @@ class UserViewTest(TestBase):
 
         # simple success
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.content), 0)
         self.assertTrue(isinstance(resp, HttpResponse))
 
         user = User.objects.get(username=self.username)

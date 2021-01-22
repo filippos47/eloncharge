@@ -21,7 +21,7 @@ def setup_package():
         install_requires=[],
         entry_points = {
             'console_scripts': [
-                'ev_group53=ev_group53.__main__:main',
+                'ev_group53=cli.__main__:main',
             ],
         },
         classifiers=[
