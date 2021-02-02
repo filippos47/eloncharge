@@ -6,7 +6,12 @@ def healthcheck(args):
     return response.text
 
 def sessionupd(args):
-    print("sessionupd")
+    source = args.source
+    token = args.apikey
+
+    url = produce_url(["admin", "system", "sessionupd"])
+    with open(args.source, "r") as f:
+        place_request("post", url, files={"file": f}, token=token, encoding="multipart/form-data")
 
 def resetsessions(args):
     url = produce_url(["admin", "resetsessions"])

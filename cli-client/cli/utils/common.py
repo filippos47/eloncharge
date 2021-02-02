@@ -28,11 +28,15 @@ def delete_token_file():
     except OSError:
         pass
 
-def place_request(method, url, data={}, token=None):
+def place_request(method, url, data={}, token=None, files={}, encoding=None):
     headers = {}
     if token:
         headers = {'X-AUTH-OBSERVATORY': token}
 
+    args = {"data": data, "headers": headers}
+    if encoding:
+        args["encoding"] = encoding
+
     requests_method = getattr(requests, method)
-    response = requests_method(url, data=data, headers=headers)
+    response = requests_method(url, **args)
     return response

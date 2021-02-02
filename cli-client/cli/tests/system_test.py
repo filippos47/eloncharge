@@ -16,9 +16,6 @@ class SystemTest(TestBase):
             mock_reqs.assert_called_with(produce_url(["admin", "healthcheck"]),
                     data={}, headers=self._get_header())
 
-    def test_sessionupd(self):
-        self.fail("Implement me!")
-
     def test_resetsessions(self):
         args = self.Arguments()
 
