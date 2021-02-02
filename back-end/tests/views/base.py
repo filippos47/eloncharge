@@ -37,6 +37,9 @@ class TestBase(TestCase):
     def _station_url(self, station_id, start, end):
         return reverse("station_sessions", args=[station_id, start, end])
 
+    def _sessionupd_url(self):
+        return reverse("system_sessionupd")
+
     def _create_user(self, username, password, email="my@mail.gov", is_superuser=False):
         user = User.objects.create(username=username,
                 email=email)
@@ -51,6 +54,13 @@ class TestBase(TestCase):
         return self.client.post(self._login_url(),
                 "username="+username+"&password="+password,
                 content_type="application/x-www-form-urlencoded")
+
+    def _sessionupd(self, f, token):
+        return self.client.post(self._sessionupd_url(),
+                {'file': f},
+                encoding="multipart/form-data",
+                #content_type="application/x-www-form-urlencoded",
+                HTTP_X_AUTH_OBSERVATORY=token)
 
     def _extract_token(self, resp):
         return json.loads(resp.content)['token']
