@@ -36,6 +36,8 @@ def place_request(method, url, data={}, token=None, files={}, encoding=None):
     args = {"data": data, "headers": headers}
     if encoding:
         args["encoding"] = encoding
+    if files:
+        args["files"] = files
 
     requests_method = getattr(requests, method)
     response = requests_method(url, **args)
