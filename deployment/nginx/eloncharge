@@ -23,7 +23,7 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://localhost:8000;
+        proxy_pass http://localhost:3000;
     }
 
     access_log /var/log/nginx/eloncharge.gr.https.access.log combined;
