@@ -3,7 +3,7 @@ server {
     listen [::]:80;
     server_name eloncharge.gr;
 
-    root /var/www/eloncharge/html;
+    root /var/www/html;
     index index.html;
 
     access_log /var/log/nginx/eloncharge.gr.access.log;
@@ -26,7 +26,7 @@ server {
         proxy_pass http://localhost:3000;
     }
 
-    access_log /var/log/nginx/eloncharge.gr.https.access.log combined;
+    access_log /var/log/nginx/eloncharge.gr.https.access.log;
     error_log /var/log/nginx/eloncharge.gr.https.error.log;
 
     ssl_certificate /etc/ssl/eloncharge.crt;

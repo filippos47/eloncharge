@@ -61,14 +61,14 @@ goddamn domain :p)
 
     ```bash
     $ cd /path/to/eloncharge/repo/front-end
-    $ nohup npm start
+    $ nohup npm start &
     ```
 
 - Fire up Django application through Gunicorn
 
     ```bash
     $ cd /path/to/eloncharge/repo/back-end
-    $ nohup gunicorn --access-logfile - --workers 3 --bind 127.0.0.1:8000 backend.wsgi
+    $ nohup gunicorn --access-logfile - --workers 3 --bind 127.0.0.1:8000 backend.wsgi &
     ```
 
 You can now navigate to `https://eloncharge.com`.

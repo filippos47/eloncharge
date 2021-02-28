@@ -27,13 +27,13 @@ The below commands have been tested on Ubuntu LTS 18.04.
 4. Generate distribution package
 
     ```bash
-    $ python3 setup.py sdist bdist_wheel
+    $ python3 setup.py build
     ```
 
 5. Install built distribution
 
     ```bash
-    $ pip3 install dist/ev_group53-<version>-py3-none-any.whl
+    $ python3 setup.py install
     ```
 
 ## Usage
