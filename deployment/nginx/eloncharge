@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name eloncharge.gr;
+
+    root /var/www/eloncharge/html;
+    index index.html;
+
+    access_log /var/log/nginx/eloncharge.gr.access.log;
+    error_log /var/log/nginx/eloncharge.gr.error.log;
+
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name eloncharge.gr;
+
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://localhost:8000;
+    }
+
+    access_log /var/log/nginx/eloncharge.gr.https.access.log combined;
+    error_log /var/log/nginx/eloncharge.gr.https.error.log;
+
+    ssl_certificate /etc/ssl/eloncharge.crt;
+    ssl_certificate_key /etc/ssl/private/eloncharge.key;
+    ssl_dhparam /etc/ssl/dhparam.pem;
+}

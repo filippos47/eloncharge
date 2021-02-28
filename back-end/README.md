@@ -7,8 +7,7 @@ The below commands have been tested on Ubuntu LTS 18.04.
 1. Install requirements
 
     ```bash
-    $ sudo apt install postgresql python3 python3-pip
-    $ pip3 install virtualenv
+    $ sudo apt install postgresql python3 python3-pip python3-venv
     ```
 
 2. Provision PostgreSQL DB
@@ -54,7 +53,7 @@ The below commands have been tested on Ubuntu LTS 18.04.
     $ source .venv/bin/activate
     ```
 
-5. Install requirements
+5. Install pip requirements
 
     ```bash
     $ pip3 install -r requirements.txt
