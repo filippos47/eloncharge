@@ -2,3 +2,4 @@
 back-end/backend/backend/settings.py
 *.pyc
 back-end/.venv
+front-end/node_modules/*
