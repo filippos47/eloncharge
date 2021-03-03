@@ -111,9 +111,6 @@ class EVViewTest(TestBase):
         self.assertTrue(body.get('PeriodTo', False))
         self.assertEqual(body['PeriodTo'], datetime_to_string(self._current_time(self.days[0])))
 
-        self.assertTrue(body.get('TotalEnergyConsumed', False))
-        self.assertEqual(body['TotalEnergyConsumed'], 50)
-
         self.assertTrue(body.get('NumberOfVisitedPoints', False))
         self.assertEqual(body['NumberOfVisitedPoints'], 2)
 

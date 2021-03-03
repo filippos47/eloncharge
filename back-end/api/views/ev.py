@@ -44,19 +44,24 @@ class EVView(View):
 
         visited_points = set()
         for idx, session in enumerate(sessions, start=1):
-            resp["VehicleChargingSessionsList"].append({
+            item = {
                 "SessionIndex": idx,
                 "SessionID": session.id,
                 "EnergyProvider": None,
                 "StartedOn": datetime_to_string(session.start),
                 "FinishedOn": datetime_to_string(session.end),
                 "EnergyDelivered": session.energy_delivered,
-                "PricePolicyRef": session.pricing_id.description,
-                "CostPerKWh": session.pricing_id.price,
                 "SessionCost": session.total_cost
-            })
+            }
+            if session.pricing_id:
+                item["PricePolicyRef"] = session.pricing_id.description
+                item["CostPerKWh"] = session.pricing_id.price
+
+            resp["VehicleChargingSessionsList"].append(item)
+
             resp["TotalEnergyConsumed"] += session.energy_delivered
-            visited_points.add(session.point_id.id)
+            if session.point_id:
+                visited_points.add(session.point_id.id)
 
         resp["NumberOfVisitedPoints"] = len(visited_points)
 

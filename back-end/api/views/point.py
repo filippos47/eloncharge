@@ -44,7 +44,7 @@ class PointView(View):
         }
 
         for idx, session in enumerate(sessions, start=1):
-            resp["ChargingSessionsList"].append({
+            item = {
                 "SessionIndex": idx,
                 "SessionID": session.id,
                 "StartedOn": datetime_to_string(session.start),
@@ -52,8 +52,12 @@ class PointView(View):
                 "Protocol": session.protocol,
                 "EnergyDelivered": session.energy_delivered,
                 "Payment": session.payment,
-                "VehicleType": session.car_id.type
-            })
+                "SessionCost": session.total_cost
+            }
+            if session.car_id:
+                item["VehicleType"] = session.car_id.type
+
+            resp["ChargingSessionsList"].append(item)
 
         if requested_format == 'csv':
             root_keys = ["Point", "PointOperator", "RequestTimestamp", "PeriodFrom", "PeriodTo",

@@ -7,7 +7,9 @@ from .views import (
     SystemView,
     PointView,
     StationView,
-    EVView
+    EVView,
+    StationInfoView,
+    EVInfoView
 )
 
 
@@ -24,6 +26,9 @@ urlpatterns = [
                 name='system_sessionupd'),
             path('admin/resetsessions', SystemView.as_view(),
                 name='system_resetsessions'),
+
+            path('ev', EVInfoView.as_view(), name='ev_info'),
+            path('station', StationInfoView.as_view(), name='ev_info'),
 
             path('SessionsPerPoint/<str:point_id>/<str:date_from>/<str:date_to>',
                 PointView.as_view(), name='point_sessions'),
