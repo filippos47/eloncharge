@@ -1,6 +1,7 @@
 server {
     listen 80;
     listen [::]:80;
+
     server_name eloncharge.gr;
 
     root /var/www/html;
@@ -24,6 +25,11 @@ server {
     location / {
         include proxy_params;
         proxy_pass http://localhost:3000;
+    }
+
+    location /evcharge/api {
+        include proxy_params;
+        proxy_pass http://localhost:8000;
     }
 
     access_log /var/log/nginx/eloncharge.gr.https.access.log;
