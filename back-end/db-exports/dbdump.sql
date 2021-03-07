@@ -880,8 +880,6 @@ COPY public.api_station (id, latitude, longtitude, address, number, zipcode, cit
 --
 
 COPY public.api_usersession (id, token, expires, user_id_id) FROM stdin;
-1	o/CBimdSRuE0iacWwZcLfn1lVNRuGS+ZuhBpNz2HaYNa26ux7rrAqDSDhf97kn6p0uhrJihYZzqIHo4Y0H03EQ==	2021-03-07 18:53:56.019086+02	1
-2	3fSskSHQ+HaPtJHFmisdKkpCTOl5szwyZduxVTT+ddEpW9TcxwBpGKPrBhrPZujO0FSQMnHOL1Uxn/EiL0XSQQ==	2021-03-07 18:54:47.529635+02	2
 \.
 
 
