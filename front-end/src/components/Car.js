@@ -1,13 +1,10 @@
 import React from "react"
 import { connect } from "react-redux"
-import { Row, Col, Table } from "reactstrap"
+import { Table } from "reactstrap"
 
 import { retrieve_car_charges } from "../redux/async";
 
 class Car extends React.Component {
-    constructor(props) {
-        super(props)
-    }
 
     componentDidMount() {
         const retrieve_car_charges_thunk = retrieve_car_charges(this.props.token, this.props.car, this.props.startDate, this.props.endDate);

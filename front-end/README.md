@@ -16,6 +16,8 @@
 
 ## Usage
 
+- Set `REACT_APP_API_URL` to proper API url, inside `.env` file
+
 - Start React server, listening at http://localhost:3000
 
     ```bash
