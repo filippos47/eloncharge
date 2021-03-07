@@ -8,8 +8,8 @@ import store from './redux/store'
 export default function App() {
     return (
         <Provider store={ store }>
+            <Header />
             <div className="main">
-                <Header />
                 <Main />
             </div>
         </Provider>

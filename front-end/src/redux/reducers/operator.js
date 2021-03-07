@@ -1,4 +1,4 @@
-import { RETRIEVE_STATIONS, RETRIEVE_POINTS, RETRIEVE_POINTS_CHARGES } from "../actionTypes";
+import { RETRIEVE_STATIONS, RETRIEVE_POINTS_CHARGES } from "../actionTypes";
 
 const initialState = {
     stations: {},
