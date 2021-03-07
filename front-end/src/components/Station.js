@@ -24,9 +24,9 @@ class Station extends React.Component {
         }.bind(this));
 
         return (
-            <ul>
+            <div>
                 { points ? points : "No points found"}
-            </ul>
+            </div>
         )
     }
 
@@ -37,8 +37,7 @@ class Station extends React.Component {
     render() {
         return (
             <div>
-                <p onClick={ this.handleOpen.bind(this) }>Station {this.props.station.address}</p>
-                { this.state.isOpen ? this.getPoints() : "" }
+                { this.getPoints() }
             </div>
         )
     }

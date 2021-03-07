@@ -1,0 +1,51 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  background-color: #FFE4C4;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+/*
+nav .navbar-nav li a:hover{
+    color: red;
+}
+*/
+.nav-normal {
+    color: #D4CECE;
+}
+.nav-normal:hover{
+    color: #E8E8E4;
+
+}
+.nav-logout {
+    color: #EF4040;
+}
+.nav-logout:hover {
+    color: red;
+}
+
+a.navbar-brand {
+    color: #FFF; 
+    font-weight: bold;
+}
+a.navbar-brand:hover{
+    color: #FFF;
+}
+
+.container {
+    max-width: 100%;
+    margin-top: 30px;
+}
+.row {
+    font-size: 20px;
+}
+
+.above-table {
+    margin-bottom: 20px;
+}

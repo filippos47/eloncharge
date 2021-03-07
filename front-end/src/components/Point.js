@@ -1,7 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
 
-import { retrieve_points_charges } from "../redux/async";
+import { retrieve_points_charges } from "../redux/async"
+import { Button, Container, Row, Col, Table } from 'reactstrap'
 
 class Point extends React.Component {
     constructor(props) {
@@ -22,17 +23,30 @@ class Point extends React.Component {
         Object.keys(this.props.point.charges).map(function(key) {
             let ch = this.props.point.charges[key];
             charges.push((
-                <p key={ ch.SessionID }>
-                    Date: {ch.StartedOn},
-                    Price: {ch.SessionCost},
-                    Energy Delivered: {ch.EnergyDelivered}
-                </p>
+                <tr className="d-flex">
+                    <th className="col-4">{ch.StartedOn}</th>
+                    <th className="col-4">{ch.SessionCost}</th>
+                    <th className="col-4">{ch.EnergyDelivered}</th>
+                </tr>
             ))
         }.bind(this));
 
         return (
             <div>
-                { charges.length ? charges : "No charges found" }
+                { charges.length > 0 ? (
+                    <Table className="table-bordered table-dark text-center table-hover">
+                        <thead>
+                            <tr className="d-flex bg-info">
+                                <th className="col-4">Date</th>
+                                <th className="col-4">Price (EUR)</th>
+                                <th className="col-4">Energy Delivered (kW)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {charges}
+                        </tbody>
+                    </Table>
+                ) : "No charges found" }
             </div>
         )
     }
@@ -43,10 +57,16 @@ class Point extends React.Component {
 
     render() {
         return (
-            <div>
-                <p onClick={ this.handleOpen.bind(this) }>Point { this.props.cnt }</p>
+            <Container>
+                <Row>
+                    <Col>
+                    <Button className="above-table btn-info" onClick={ this.handleOpen.bind(this) }>
+                        Point No.{ this.props.cnt }
+                    </Button>
+                    </Col>
+                </Row>
                 { this.state.isOpen ? this.pointCharges() : "" }
-            </div>
+            </Container>
         )
     }
 }

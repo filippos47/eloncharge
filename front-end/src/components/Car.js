@@ -1,50 +1,60 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Row, Col, Table } from "reactstrap"
 
 import { retrieve_car_charges } from "../redux/async";
 
 class Car extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isOpen: false};
     }
 
     componentDidMount() {
         const retrieve_car_charges_thunk = retrieve_car_charges(this.props.token, this.props.car, this.props.startDate, this.props.endDate);
         this.props.dispatch(retrieve_car_charges_thunk);
     }
+    componentDidUpdate() {
+        const retrieve_car_charges_thunk = retrieve_car_charges(this.props.token, this.props.car, this.props.startDate, this.props.endDate);
+        this.props.dispatch(retrieve_car_charges_thunk);
+    }
 
     carCharges() {
-        console.log(this.props.car.charges);
         const charges = [];
-        // To view available items uncomment below
-        // console.log(this.props.car.charges)
+
         Object.keys(this.props.car.charges).map(function(key) {
             let ch = this.props.car.charges[key];
             charges.push((
-                <p key={ ch.SessionID }>
-                    Date: {ch.StartedOn},
-                    Price: {ch.SessionCost},
-                    Energy Delivered: {ch.EnergyDelivered}
-                </p>
+                <tr className="d-flex">
+                    <th className="col-4">{ch.StartedOn}</th>
+                    <th className="col-4">{ch.SessionCost}</th>
+                    <th className="col-4">{ch.EnergyDelivered}</th>
+                </tr>
             ))
         }.bind(this));
         return (
             <div>
-                { charges.length ? charges : "No charges found" }
+                { charges.length > 0 ? (
+                    <Table className="table-bordered table-dark text-center table-hover">
+                        <thead>
+                            <tr className="d-flex bg-info">
+                                <th className="col-4">Date</th>
+                                <th className="col-4">Price (EUR)</th>
+                                <th className="col-4">Energy Delivered (kW)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {charges}
+                        </tbody>
+                    </Table>
+                ) : "No charges found" }
             </div>
         )
-    }
-
-    handleOpen(e) {
-        this.setState({isOpen: !this.state.isOpen});
     }
 
     render() {
         return (
             <div>
-                <p onClick={ this.handleOpen.bind(this) }>Car { this.props.car.name }</p>
-                { this.state.isOpen ? this.carCharges() : "" }
+                { this.carCharges() }
             </div>
         )
     }

@@ -40,28 +40,31 @@ class Home extends React.Component {
             msg = "You should be redirected momentarily"
             color = "success"
         }
-        if (this.props.loginStatus === 'fail') {
+        else if (this.props.loginStatus === 'fail') {
             msg = "Wrong username or password!"
             color = "danger"
         }
-        return (<Alert color={color}>{msg}</Alert>);
+        else {
+            msg = ""
+        }
+        return ( msg.length ? <Alert color={color}>{msg}</Alert> : "");
     }
 
     render() {
         console.log(process.env.REACT_APP_API_URL);
         return (
-            <Form onSubmit={ this.handleSubmit.bind(this) }>
+            <Form className="login-form" onSubmit={ this.handleSubmit.bind(this) }>
                 <FormGroup>
-                    <Label htmlFor="username">Username</Label>
-                    <Input name="username" id="username" type="text" required
-                        value={this.state.username} onChange={this.handleUpdate.bind(this)}></Input>
+                        <Label htmlFor="username">Username</Label>
+                        <Input name="username" placeholder="Username" id="username" type="text" required
+                            value={this.state.username} onChange={this.handleUpdate.bind(this)}></Input>
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="password">Password</Label>
-                    <Input name="password" id="password" type="password" required
+                        <Label htmlFor="password">Password</Label>
+                    <Input name="password" placeholder="Password" id="password" type="password" required
                         value={this.state.password} onChange={this.handleUpdate.bind(this)}></Input>
                 </FormGroup>
-                <Button>Login</Button>
+                <Button color="primary"> Login </Button>
                 {this.getState()}
             </Form>
         )
