@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.15 (Ubuntu 10.15-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.15 (Ubuntu 10.15-0ubuntu0.18.04.1)
+-- Dumped from database version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.6 (Ubuntu 12.6-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,23 +16,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: api_car; Type: TABLE; Schema: public; Owner: eloncharge
@@ -81,17 +67,15 @@ ALTER SEQUENCE public.api_car_id_seq OWNED BY public.api_car.id;
 
 CREATE TABLE public.api_chargesession (
     id integer NOT NULL,
-    energy_delivered integer NOT NULL,
-    total_cost integer NOT NULL,
+    energy_delivered double precision NOT NULL,
+    total_cost double precision NOT NULL,
     start timestamp with time zone NOT NULL,
     "end" timestamp with time zone NOT NULL,
     payment character varying(2) NOT NULL,
     protocol character varying(2) NOT NULL,
     car_id_id integer,
     point_id_id integer,
-    pricing_id_id integer,
-    CONSTRAINT api_chargesession_energy_delivered_check CHECK ((energy_delivered >= 0)),
-    CONSTRAINT api_chargesession_total_cost_check CHECK ((total_cost >= 0))
+    pricing_id_id integer
 );
 
 
@@ -720,10 +704,10 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.api_car (id, licence, brand, model, release, consumption, type, user_id_id) FROM stdin;
-1	464 NNY	Audi	S10 Extended Cab	2006-10-26	6	Sedan, Coupe, Wagon	1
-2	685 ZFS	Jeep	Panamera	1993-08-15	8	Pickup	1
-3	027NM	Toyota	Jetta	1974-07-22	8	SUV1992	2
-4	MBE5597	Ford	S80	1990-10-20	15	Hatchback	2
+1	ZTR Z97	Mercedes-Benz	EQC	2020-05-04	8	Sedan	1
+2	996 CWS	Chevrolet	Spark EV	2020-05-20	15	Pickup	1
+3	4-75105	BMW	i3	2019-08-23	11	Pickup	2
+4	07O 5101	Nissan	Leaf	2019-04-10	5	Sedan	2
 \.
 
 
@@ -732,18 +716,67 @@ COPY public.api_car (id, licence, brand, model, release, consumption, type, user
 --
 
 COPY public.api_chargesession (id, energy_delivered, total_cost, start, "end", payment, protocol, car_id_id, point_id_id, pricing_id_id) FROM stdin;
-1	37	27	2020-12-16 09:09:37+02	2020-12-17 01:43:25+02	CH	WD	1	3	8
-2	45	37	2020-12-16 00:44:29+02	2020-12-17 04:18:06+02	CH	WR	1	2	5
-3	12	23	2020-12-16 08:56:21+02	2020-12-17 09:13:40+02	CH	WR	1	1	2
-4	12	38	2020-12-16 17:16:42+02	2020-12-17 11:28:36+02	CH	WR	2	5	9
-5	37	47	2020-12-16 23:51:14+02	2020-12-17 06:38:25+02	CH	WD	2	5	10
-6	50	49	2020-12-16 19:38:52+02	2020-12-17 14:46:17+02	CH	WD	2	5	10
-7	47	45	2020-12-16 18:38:35+02	2020-12-17 21:25:31+02	CH	WR	3	5	10
-8	5	32	2020-12-16 08:06:44+02	2020-12-17 22:25:49+02	CH	WD	3	1	2
-9	38	49	2020-12-16 05:26:19+02	2020-12-17 06:59:58+02	CD	WD	3	3	7
-10	18	32	2020-12-16 00:25:51+02	2020-12-17 01:41:17+02	CD	WD	4	5	9
-11	47	31	2020-12-16 20:13:53+02	2020-12-17 03:11:02+02	CH	WR	4	5	9
-12	15	33	2020-12-16 19:39:33+02	2020-12-17 18:00:56+02	CD	WR	4	5	10
+1	40.478	43.5	2021-02-11 01:07:56+02	2021-02-11 07:08:09+02	CH	WD	1	15	8
+2	26.488	29.58	2021-01-21 16:06:41+02	2021-01-21 19:07:29+02	CD	WD	1	4	2
+3	46.383	27.72	2021-02-15 07:48:09+02	2021-02-15 12:48:27+02	CH	WD	1	29	15
+4	37.691	44.24	2021-02-26 12:32:32+02	2021-02-26 19:33:10+02	CH	WR	1	6	2
+5	46.566	49.29	2021-02-14 12:21:16+02	2021-02-15 00:22:00+02	CD	WR	1	10	6
+6	40.164	27.15	2021-02-05 10:06:02+02	2021-02-05 15:06:39+02	CD	WR	1	37	18
+7	8.479	49.44	2021-02-27 15:23:29+02	2021-02-28 03:23:36+02	CH	WR	1	4	2
+8	31.075	40.26	2021-01-20 21:41:59+02	2021-01-21 05:42:29+02	CH	WR	1	32	17
+9	9.442	45.59	2021-02-05 13:22:59+02	2021-02-06 01:23:01+02	CH	WD	1	26	14
+10	4.479	23.21	2021-02-08 09:43:36+02	2021-02-08 14:44:22+02	CH	WR	1	23	12
+11	26.737	35.46	2021-01-12 06:00:35+02	2021-01-12 18:01:26+02	CH	WD	1	41	20
+12	3.047	35.41	2021-01-26 06:56:23+02	2021-01-26 10:57:16+02	CH	WR	1	29	16
+13	21.593	41.84	2021-02-20 13:43:52+02	2021-02-21 00:44:43+02	CD	WR	1	35	18
+14	10.61	39.27	2021-01-14 09:05:41+02	2021-01-14 18:05:53+02	CD	WR	1	32	17
+15	49.746	31.19	2021-03-05 13:17:46+02	2021-03-05 23:18:15+02	CH	WR	1	7	3
+16	14.497	44.58	2021-02-22 09:36:12+02	2021-02-22 13:36:21+02	CD	WR	1	3	1
+17	20.664	45.2	2021-02-09 19:57:09+02	2021-02-10 02:57:26+02	CH	WR	1	13	6
+18	31.375	27.29	2021-02-17 07:26:06+02	2021-02-17 16:26:43+02	CH	WR	1	15	8
+19	7.366	32.9	2021-03-01 18:10:48+02	2021-03-02 02:10:50+02	CD	WR	2	40	20
+20	43.447	42.61	2021-01-21 09:32:52+02	2021-01-21 15:33:29+02	CD	WD	2	10	5
+21	17.04	32.85	2021-01-15 03:35:51+02	2021-01-15 09:36:36+02	CH	WR	2	21	11
+22	26.007	48.85	2021-03-03 01:53:56+02	2021-03-03 08:54:02+02	CD	WD	2	28	15
+23	40.739	36.91	2021-01-25 04:53:53+02	2021-01-25 15:53:59+02	CH	WR	2	32	17
+24	29.689	38.53	2021-01-09 01:58:25+02	2021-01-09 09:58:33+02	CD	WD	2	6	2
+25	14.796	34.94	2021-01-13 11:56:34+02	2021-01-13 22:57:20+02	CD	WR	2	9	5
+26	48.441	46.33	2021-02-22 23:14:20+02	2021-02-23 11:15:15+02	CH	WR	2	37	18
+27	26.388	23.93	2021-01-19 04:57:54+02	2021-01-19 14:58:12+02	CD	WR	2	28	15
+28	32.611	39.74	2021-02-22 12:41:31+02	2021-02-22 17:42:11+02	CH	WR	2	17	7
+29	11.702	33.94	2021-02-24 02:03:51+02	2021-02-24 12:04:46+02	CH	WR	2	10	6
+30	20.467	43	2021-01-09 22:22:25+02	2021-01-10 04:22:33+02	CD	WR	2	39	19
+31	35.314	34.66	2021-02-03 20:34:01+02	2021-02-04 08:34:51+02	CH	WD	2	36	18
+32	30.001	21.81	2021-01-24 03:15:21+02	2021-01-24 14:16:14+02	CH	WD	2	21	10
+33	21.481	44.06	2021-02-26 20:32:19+02	2021-02-27 03:32:59+02	CD	WD	2	26	14
+34	23.802	38.29	2021-02-06 12:57:58+02	2021-02-06 19:58:03+02	CH	WD	3	4	3
+35	32.09	33.09	2021-02-19 18:29:57+02	2021-02-20 01:30:46+02	CH	WR	3	19	8
+36	18.051	37.59	2021-02-18 01:22:59+02	2021-02-18 13:23:27+02	CD	WR	3	18	7
+37	12.136	21.86	2021-01-14 21:24:38+02	2021-01-15 03:25:26+02	CH	WD	3	6	3
+38	10.088	28.43	2021-02-28 06:31:02+02	2021-02-28 14:31:25+02	CD	WR	3	38	18
+39	30.25	31.58	2021-03-03 19:13:22+02	2021-03-03 22:13:47+02	CD	WR	3	41	20
+40	44.786	31.37	2021-03-01 06:42:47+02	2021-03-01 18:42:49+02	CH	WR	3	34	18
+41	29.54	35.77	2021-02-12 08:00:25+02	2021-02-12 19:01:21+02	CH	WR	3	22	9
+42	27.162	43.2	2021-02-23 02:34:37+02	2021-02-23 11:35:30+02	CH	WD	3	14	4
+43	14.955	41.14	2021-01-11 00:02:15+02	2021-01-11 10:03:12+02	CD	WR	3	33	18
+44	46.436	22.6	2021-01-13 15:26:54+02	2021-01-13 22:27:34+02	CH	WR	3	5	2
+45	29.334	25.6	2021-02-03 14:11:01+02	2021-02-03 17:11:21+02	CH	WR	3	19	7
+46	20.373	34.04	2021-01-28 15:07:41+02	2021-01-29 02:08:14+02	CH	WD	3	38	18
+47	10.633	36.12	2021-01-25 22:33:01+02	2021-01-26 01:33:16+02	CH	WR	4	17	8
+48	21.319	20.12	2021-02-26 18:36:00+02	2021-02-27 02:36:54+02	CD	WR	4	20	7
+49	35.207	27.16	2021-01-18 19:21:09+02	2021-01-18 22:22:03+02	CH	WD	4	4	3
+50	17.005	48.15	2021-01-26 06:41:06+02	2021-01-26 18:41:55+02	CH	WR	4	11	4
+51	6.781	36.48	2021-03-05 01:59:45+02	2021-03-05 06:00:12+02	CD	WD	4	34	18
+52	46.135	32.23	2021-01-31 21:31:17+02	2021-02-01 00:31:30+02	CH	WD	4	31	17
+53	43.753	45.06	2021-01-16 22:07:00+02	2021-01-17 07:07:08+02	CH	WR	4	13	4
+54	24.212	39.39	2021-03-04 12:32:40+02	2021-03-05 00:32:41+02	CH	WR	4	31	17
+55	38.564	40.62	2021-01-21 17:02:53+02	2021-01-22 00:03:01+02	CH	WD	4	7	3
+56	44.88	47.36	2021-01-07 10:17:52+02	2021-01-07 21:18:03+02	CD	WR	4	7	3
+57	12.763	37.01	2021-01-08 13:03:00+02	2021-01-08 16:03:45+02	CD	WR	4	18	8
+58	32.955	44.15	2021-01-26 03:48:16+02	2021-01-26 07:49:03+02	CH	WD	4	34	18
+59	31.614	46.76	2021-01-30 14:34:46+02	2021-01-30 18:35:20+02	CH	WD	4	21	9
+60	3.609	49.38	2021-01-26 06:25:19+02	2021-01-26 14:26:07+02	CH	WD	4	23	12
+61	8.874	24.19	2021-02-27 01:27:07+02	2021-02-27 07:27:44+02	CH	WR	4	5	3
 \.
 
 
@@ -753,10 +786,46 @@ COPY public.api_chargesession (id, energy_delivered, total_cost, start, "end", p
 
 COPY public.api_point (id, station_id_id) FROM stdin;
 1	1
-2	2
-3	3
-4	4
-5	4
+2	1
+3	1
+4	2
+5	2
+6	2
+7	2
+8	2
+9	3
+10	3
+11	3
+12	3
+13	3
+14	3
+15	4
+16	4
+17	4
+18	4
+19	4
+20	4
+21	5
+22	5
+23	6
+24	6
+25	6
+26	7
+27	7
+28	7
+29	7
+30	8
+31	8
+32	8
+33	9
+34	9
+35	9
+36	9
+37	9
+38	9
+39	10
+40	10
+41	10
 \.
 
 
@@ -765,16 +834,26 @@ COPY public.api_point (id, station_id_id) FROM stdin;
 --
 
 COPY public.api_pricing (id, description, price, station_id_id) FROM stdin;
-1	Make stage Congress. Positive natural nearly themselves of.\nNew defense material road whole mind south. Site box power responsibility save outside thousand.	2	1
-2	Fly success church relationship special. Kitchen action anything. Certainly else we section question style clearly.\nDevelopment station charge tough agree charge condition.	3	1
-3	Approach choose doctor. Easy heart contain have chance. Continue religious character. Partner establish conference level yeah just decide.	2	2
-4	Star fast sing know. Thought glass themselves visit option act bag. Far paper reality wait administration enter keep. Option remain rest theory alone customer.	3	2
-5	Energy deal tend meet guy key total. Part necessary whatever pattern even wall.\nPopulation serve despite nature space enough. Specific go mission forget dream.	3	2
-6	Sort free investment relate thus base end. Federal board raise usually might. If well peace soldier interesting.\nEver power board when before popular learn. Front operation fact author.	1	3
-7	Money officer compare those parent. These body explain pay.\nOk let partner almost concern sea edge. Probably yourself artist agreement final main official image.	3	3
-8	Many involve follow wide keep. Total pass father. Recognize pretty from share pull situation.	3	3
-9	Property certainly city space particularly interesting anything foreign. Control night real local. Themselves attack help around.	1	4
-10	Door statement kind affect leave purpose college. Record miss research on television around.	2	4
+1	Treat card international these system modern. Often street kid local born.\nStay case PM choice choose certain forget. Always cover once look around hundred. Head prepare candidate surface little lot.	1.688	1
+2	North south perhaps analysis make federal. By them consider appear same whose.\nAnd feeling man sport never rich here. Ahead drug travel itself question buy. Reflect across field.	1.893	2
+3	Soon situation production brother. Especially mind two red board people. Station cause blue not.\nCar bed human near personal medical focus. Give top degree east simply.	2.401	2
+4	Cut interview green everyone and two. Quality air language each itself that. Drop value budget stuff month.	1.45	3
+5	Full surface line. Available pattern bar herself like human give. Billion share again different compare second popular.	2.73	3
+6	Tax population tax building. Think game federal choice able me.\nAfter choice such anything side. Name western mother measure.	1.61	3
+7	Big thousand network building partner artist early many.\nDiscover rule chair factor with yet. Star several remain voice leg career strong. Modern eye role.	1.601	4
+8	Town adult window type that industry memory. Bit begin though evidence visit. Small performance scene across either baby.\nItself we fly center. Travel then force night agree describe although.	2.627	4
+9	Store increase better bring answer. But source public work wonder large. Receive bad space wife every prevent. Image radio political reality enough me.\nSimply break administration instead.	1.021	5
+10	Physical degree try include total. Lay get room gun car smile sort. Citizen system care office never new central create.\nOthers wide police threat when enjoy fine.	2.984	5
+11	Thousand service line what today learn. Street partner something central ground skin cost. Artist town just someone.	2.808	5
+12	Majority much new free director doctor.\nEntire process family small north per teacher. Fill throughout son commercial television despite little surface.	2.346	6
+13	Move key particularly between notice. Could color their themselves discussion.\nAlong maintain study treatment for or write. Day moment cost current house development.	1.509	6
+14	Turn campaign talk manage. Go support term these hour.\nClear may family her send reduce tonight. Station worker return energy.	2.728	7
+15	Citizen time meeting. Here strategy sit change education future.\nCitizen land move specific. Last community movement with employee seek open. Onto report American soldier.	2.188	7
+16	Course possible positive say. However our letter maybe foreign range. Station return cultural tree.	2.128	7
+17	Serve data lose idea today minute thing. Democrat total into by pick. Life reflect somebody civil they.\nSystem hard between usually. Collection glass relate kid.	2.051	8
+18	Ahead young adult firm risk involve possible. Maintain soon me pressure chance day. Success rich call various might what employee.	1.003	9
+19	Everyone at themselves old often interest these. When source indeed important bad. Traditional job election ten role deal sport.\nSix teach concern out. Inside never exactly. Concern pull join.	1.963	10
+20	Performance produce computer senior reduce. Take already instead talk accept cut.\nThere popular pressure college I effort political.	2.298	10
 \.
 
 
@@ -783,10 +862,16 @@ COPY public.api_pricing (id, description, price, station_id_id) FROM stdin;
 --
 
 COPY public.api_station (id, latitude, longtitude, address, number, zipcode, city, region, country, operator_id) FROM stdin;
-1	38.0491855000000001	23.8352652999999997	Nikodimou	353	50166	Melissia	Attica	Greece	1
-2	37.9667104999999978	23.7479130000000005	Kalyftaki	486	88154	Pagkrati	Attica	Greece	1
-3	37.9968599999999981	23.7475300000000011	Aidiniou	152	49871	Agios Stefanos	Attica	Greece	2
-4	38.0589700000000022	23.7911499999999982	Virwnos	384	46612	Pefki	Attica	Greece	2
+1	38.05949907359015	23.78756308974072	Leoforos Eirinis	53	15121	Pefki	Attica	Greece	1
+2	38.11965411202746	23.857860528706954	Leoforos Marathwnos	10	14569	Drosia	Attica	Greece	1
+3	37.95926272048575	23.615749635453312	Leoforos Dimokratias	132	18756	Keratsini	Attica	Greece	1
+4	38.050580129610026	23.76473209312465	Leoforos Irakleioy	388-390	14122	Irakleio	Attica	Greece	1
+5	37.98854473330098	23.763610728706777	Leoforos Kifisias	34	11526	Ampelokipoi	Attica	Greece	1
+6	38.119084482991894	23.823922406478125	SEA	Varimpompis	14671	Nea Erithraia	Attica	Greece	2
+7	37.986598667856775	23.73448064249625	Spirou Trikoupi	3	10683	Exarcheia	Attica	Greece	2
+8	38.041298981745726	23.688213063498598	Kosta Varnali	70	13231	Petroupoli	Attica	Greece	2
+9	37.871181514356174	23.758470864288803	Paradromos Leoforou Vouliagmenis	96	16675	Glifada	Attica	Greece	2
+10	38.01819548661664	23.803064271035588	Palaiologou	85	15232	Chalandri	Attica	Greece	2
 \.
 
 
@@ -875,8 +960,8 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$216000$xUvi3DGQ4k2P$uOrdXU0SfqkJraJCtZwtzcrqWy8xgSurVh89+m7bHHA=	\N	f	nbird	Rebecca	Lopez	julie42@yahoo.com	f	t	2021-01-15 00:09:39.280157+02
-2	pbkdf2_sha256$216000$joKH75sBPN4c$nzyQSGmPr+W1QY5/NKYmE6ikZt6kYWALnpZA029Az4k=	\N	f	destiny03	Kelly	Russell	cordovajohn@giles.com	f	t	2021-01-15 00:09:39.466771+02
+1	pbkdf2_sha256$216000$p2TLpqGniDhw$78nL12XvYZs9ysg4CzhkAJo4W7TQJWs2DkUxIiWl8C4=	\N	f	hfrank	Kenneth	Phillips	william41@gmail.com	f	t	2021-03-07 15:53:26.00812+02
+2	pbkdf2_sha256$216000$PDHS0lMS41nq$ygdogGdZAG9lvX46KTLDBx5jmeI2FJEJ+R8M8F3xpMs=	\N	f	silvajoseph	Jennifer	Benson	blackburnrobert@sherman.com	f	t	2021-03-07 15:53:26.165309+02
 \.
 
 
@@ -929,28 +1014,29 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2021-01-15 00:09:30.770713+02
-2	auth	0001_initial	2021-01-15 00:09:31.085793+02
-3	admin	0001_initial	2021-01-15 00:09:31.728865+02
-4	admin	0002_logentry_remove_auto_add	2021-01-15 00:09:31.873444+02
-5	admin	0003_logentry_add_action_flag_choices	2021-01-15 00:09:31.956993+02
-6	api	0001_initial	2021-01-15 00:09:32.666549+02
-7	api	0002_auto_20210106_1157	2021-01-15 00:09:33.140046+02
-8	api	0003_auto_20210106_1218	2021-01-15 00:09:33.411331+02
-9	api	0004_auto_20210107_1105	2021-01-15 00:09:33.590528+02
-10	contenttypes	0002_remove_content_type_name	2021-01-15 00:09:33.637623+02
-11	auth	0002_alter_permission_name_max_length	2021-01-15 00:09:33.664227+02
-12	auth	0003_alter_user_email_max_length	2021-01-15 00:09:33.682593+02
-13	auth	0004_alter_user_username_opts	2021-01-15 00:09:33.707223+02
-14	auth	0005_alter_user_last_login_null	2021-01-15 00:09:33.724362+02
-15	auth	0006_require_contenttypes_0002	2021-01-15 00:09:33.736797+02
-16	auth	0007_alter_validators_add_error_messages	2021-01-15 00:09:33.764314+02
-17	auth	0008_alter_user_username_max_length	2021-01-15 00:09:33.811925+02
-18	auth	0009_alter_user_last_name_max_length	2021-01-15 00:09:33.843016+02
-19	auth	0010_alter_group_name_max_length	2021-01-15 00:09:33.864288+02
-20	auth	0011_update_proxy_permissions	2021-01-15 00:09:33.88458+02
-21	auth	0012_alter_user_first_name_max_length	2021-01-15 00:09:33.903709+02
-22	sessions	0001_initial	2021-01-15 00:09:33.990816+02
+1	contenttypes	0001_initial	2021-03-07 15:53:12.899611+02
+2	auth	0001_initial	2021-03-07 15:53:13.349235+02
+3	admin	0001_initial	2021-03-07 15:53:14.076183+02
+4	admin	0002_logentry_remove_auto_add	2021-03-07 15:53:14.186536+02
+5	admin	0003_logentry_add_action_flag_choices	2021-03-07 15:53:14.198442+02
+6	api	0001_initial	2021-03-07 15:53:14.736002+02
+7	api	0002_auto_20210106_1157	2021-03-07 15:53:15.447055+02
+8	api	0003_auto_20210106_1218	2021-03-07 15:53:15.899445+02
+9	api	0004_auto_20210107_1105	2021-03-07 15:53:16.10045+02
+10	api	0005_auto_20210307_1447	2021-03-07 15:53:16.515942+02
+11	contenttypes	0002_remove_content_type_name	2021-03-07 15:53:16.546047+02
+12	auth	0002_alter_permission_name_max_length	2021-03-07 15:53:16.577473+02
+13	auth	0003_alter_user_email_max_length	2021-03-07 15:53:16.595949+02
+14	auth	0004_alter_user_username_opts	2021-03-07 15:53:16.617088+02
+15	auth	0005_alter_user_last_login_null	2021-03-07 15:53:16.638562+02
+16	auth	0006_require_contenttypes_0002	2021-03-07 15:53:16.649377+02
+17	auth	0007_alter_validators_add_error_messages	2021-03-07 15:53:16.671605+02
+18	auth	0008_alter_user_username_max_length	2021-03-07 15:53:16.749385+02
+19	auth	0009_alter_user_last_name_max_length	2021-03-07 15:53:16.76825+02
+20	auth	0010_alter_group_name_max_length	2021-03-07 15:53:16.795399+02
+21	auth	0011_update_proxy_permissions	2021-03-07 15:53:16.813772+02
+22	auth	0012_alter_user_first_name_max_length	2021-03-07 15:53:16.839352+02
+23	sessions	0001_initial	2021-03-07 15:53:16.937162+02
 \.
 
 
@@ -973,35 +1059,35 @@ SELECT pg_catalog.setval('public.api_car_id_seq', 4, true);
 -- Name: api_chargesession_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.api_chargesession_id_seq', 12, true);
+SELECT pg_catalog.setval('public.api_chargesession_id_seq', 61, true);
 
 
 --
 -- Name: api_point_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.api_point_id_seq', 5, true);
+SELECT pg_catalog.setval('public.api_point_id_seq', 41, true);
 
 
 --
 -- Name: api_pricing_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.api_pricing_id_seq', 10, true);
+SELECT pg_catalog.setval('public.api_pricing_id_seq', 20, true);
 
 
 --
 -- Name: api_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.api_station_id_seq', 4, true);
+SELECT pg_catalog.setval('public.api_station_id_seq', 10, true);
 
 
 --
 -- Name: api_usersession_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.api_usersession_id_seq', 1, false);
+SELECT pg_catalog.setval('public.api_usersession_id_seq', 2, true);
 
 
 --
@@ -1064,7 +1150,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 12, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: eloncharge
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 22, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
 
 
 --

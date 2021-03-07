@@ -20,8 +20,8 @@ class ChargeSession(models.Model):
             on_delete=models.SET_NULL)
     pricing_id = models.ForeignKey(Pricing, null=True,
             on_delete=models.SET_NULL)
-    energy_delivered = models.PositiveIntegerField()
-    total_cost = models.PositiveIntegerField()
+    energy_delivered = models.FloatField()
+    total_cost = models.FloatField()
     start = models.DateTimeField()
     end = models.DateTimeField()
     payment = models.CharField(
