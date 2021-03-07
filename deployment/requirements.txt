@@ -1,3 +1,6 @@
+setuptools==51.1.2
+wheel==0.36.2
+requests==2.25.1
 Django==3.1.5
 psycopg2-binary==2.8.6
 Faker==5.5.1
