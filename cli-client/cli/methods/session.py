@@ -7,7 +7,8 @@ def login(args):
     url = produce_url(['login'])
     data = {'username': args.username, 'password': args.passw}
     response = place_request("post", url, data=data)
-    create_token_file(response.json()["token"])
+    if response.status_code == 200:
+        create_token_file(response.json()["token"])
     return response.text
 
 def logout(args):
