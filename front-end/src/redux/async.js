@@ -49,7 +49,7 @@ export function retrieve_car_charges(token, car, start, end) {
 
         try {
             const res = await Api({ token }).get(url, {});
-            charges = res.data["VehicleChargingSessionsList"];
+            charges = res.data["VehicleChargingSessionsList"].reverse();
         } catch (err) {
             charges = {};
         }
@@ -82,7 +82,7 @@ export function retrieve_points_charges(token, station, point, start, end) {
 
         try {
             const res = await Api({ token }).get(url, {});
-            charges = res.data["ChargingSessionsList"];
+            charges = res.data["ChargingSessionsList"].reverse();
         } catch (err) {
             charges = {};
         }
