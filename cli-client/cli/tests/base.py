@@ -7,8 +7,9 @@ class TestBase(TestCase):
                 setattr(self, k, v)
 
     class Response:
-        def __init__(self, text):
+        def __init__(self, text, status_code=200):
             self.text = text
+            self.status_code = status_code
 
         def json(self):
             return self.text

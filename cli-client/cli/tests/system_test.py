@@ -20,7 +20,7 @@ class SystemTest(TestBase):
         args = self.Arguments()
 
         resp = self.Response("okok")
-        with mock.patch("requests.post", return_value=resp) as mock_reqs:
+        with mock.patch("requests.delete", return_value=resp) as mock_reqs:
             r = resetsessions(args)
 
             self.assertEqual(r, resp.text)
