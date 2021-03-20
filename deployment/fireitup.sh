@@ -7,7 +7,7 @@ echo "2. PSQL db pass set inside \$DJANGO_CUSTOM_SETTINGS file is same with actu
 echo "   db password, \$DB_PASS"
 
 while true; do
-    read -p "Do you wish to install this program? [y/n]" yn
+    read -p "Do you wish to proceed with this operation? [y/n]" yn
     case $yn in
         [Yy] ) break;;
         * ) exit;;

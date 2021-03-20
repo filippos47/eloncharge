@@ -55,17 +55,17 @@ def main():
         parents=[format_parser, apikey_parser])
     sessions_per_point_parser.add_argument(
         "--point",
-        help="specify point",
+        help="specify point [<ID>]",
         required=True
     )
     sessions_per_point_parser.add_argument(
         "--datefrom",
-        help="enter starting date of interval",
+        help="enter starting date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
     sessions_per_point_parser.add_argument(
         "--dateto",
-        help="enter ending date of interval",
+        help="enter ending date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
 
@@ -74,17 +74,17 @@ def main():
         parents=[format_parser, apikey_parser])
     sessions_per_station_parser.add_argument(
         "--station",
-        help="specify station",
+        help="specify station [<ID>]",
         required=True
     )
     sessions_per_station_parser.add_argument(
         "--datefrom",
-        help="enter starting date of interval",
+        help="enter starting date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
     sessions_per_station_parser.add_argument(
         "--dateto",
-        help="enter ending date of interval",
+        help="enter ending date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
 
@@ -93,17 +93,17 @@ def main():
         parents=[format_parser, apikey_parser])
     sessions_per_ev_parser.add_argument(
         "--ev",
-        help="specify ev",
+        help="specify ev [<LICENSE-PLATE>]",
         required=True
     )
     sessions_per_ev_parser.add_argument(
         "--datefrom",
-        help="enter starting date of interval",
+        help="enter starting date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
     sessions_per_ev_parser.add_argument(
         "--dateto",
-        help="enter ending date of interval",
+        help="enter ending date of interval [YYYY-MM-DD hh:mm:ss]",
         required=True
     )
 

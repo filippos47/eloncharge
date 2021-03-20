@@ -45,13 +45,13 @@ REACT_ENV_FILE="$DIR/front-end/.env"
 
 Upon review, just execute the deployment script:
 ```bash
-bash deploy.sh
+bash fireitup.sh
 ```
 
 One last step to use the cli-client, is to activate the virtual environment in
 which the script installed it. To do so, execute:
 ```bash
-source `git rev-parse --show-toplevel`/.venv/bin/activate`
+source /path/to/eloncharge/.venv/bin/activate`
 ```
 
 You can now navigate to `https://eloncharge.gr`. You can also administer the app
@@ -75,7 +75,7 @@ is documented below.
 2. Set up virtual environment
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`
+    $ cd /path/to/eloncharge
     $ python3 -m venv .venv
     $ source .venv/bin/activate
     $ pip3 install -r deployment/requirements.txt
@@ -92,7 +92,7 @@ is documented below.
 4. Set up backend
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/back-end
+    $ cd /path/to/eloncharge/back-end
     $ cp backend/settings_test.py backend/settings.py
     $ python3 manage.py migrate
     $ python3 manage.py populatedb-demo
@@ -100,14 +100,14 @@ is documented below.
 5. Set up frontend
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/front-end
+    $ cd /path/to/eloncharge/front-end
     $ npm install
     ```
 
 6. Set up cli-client
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/cli-client
+    $ cd /path/to/eloncharge/cli-client
     $ python3 setup.py build
     $ python3 setup.py install
     ```
@@ -115,7 +115,7 @@ is documented below.
 7. Set up NGINX reverse proxy
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/deployment
+    $ cd /path/to/eloncharge/deployment
     $ sudo cp -r ssl/* /etc/ssl
     $ sudo cp nginx/eloncharge /etc/nginx/sites-available/eloncharge
     $ sudo ln -sn /etc/nginx/sites-available/eloncharge /etc/nginx/sites-enabled/eloncharge
@@ -134,13 +134,13 @@ is documented below.
 1. Fire up React server
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/front-end
+    $ cd /path/to/eloncharge/front-end
     $ nohup npm start &
     ```
 
 2. Fire up Django application through Gunicorn
 
     ```bash
-    $ cd `git rev-parse --show-toplevel`/back-end
+    $ cd /path/to/eloncharge/back-end
     $ nohup gunicorn --access-logfile - --workers 3 --bind 127.0.0.1:8000 backend.wsgi &
     ```
